@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "postinstall": "node scripts/prisma-generate.js",
-    "build": "node scripts/prisma-generate.js && next build",
+    "build": "node scripts/prisma-generate.js && node scripts/restore-on-deploy.js && next build",
+    "db:restore": "tsx prisma/restore-snapshot.ts",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
