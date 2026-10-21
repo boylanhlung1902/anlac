@@ -1,0 +1,115 @@
+{
+  "ban-ghe-da": {
+    "name": "Bàn Ghế Đá",
+    "description": "Bàn ghế đá tự nhiên nguyên khối, đường nét thô mộc và bền vững cho sân vườn, biệt thự.",
+    "images": [
+      "/images/san-pham-my-nghe/ban-ghe-da/anh1.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh2.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh3.jpg",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh4.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh5.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh6.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh7.webp",
+      "/images/san-pham-my-nghe/ban-ghe-da/anh8.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/ban-ghe-da/anh1.webp"
+  },
+  "dai-phun-nuoc": {
+    "name": "Đài Phun Nước",
+    "description": "Đài phun nước đá tự nhiên, mang âm thanh nước và điểm nhấn phong thủy cho không gian ngoài trời.",
+    "images": [
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh2.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh3.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh4.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh5.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh6.webp",
+      "/images/san-pham-my-nghe/dai-phun-nuoc/anh7.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp"
+  },
+  "bang-hieu-da": {
+    "name": "Bảng Hiệu Đá",
+    "description": "Bảng hiệu đá khắc chữ tinh xảo, sang trọng và bền theo thời gian.",
+    "images": [
+      "/images/san-pham-my-nghe/bang-hieu-da/anh1.jpg",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh2.jpg",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh3.jpg",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh4.jpg",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh5.jpg",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh6.webp",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh7.webp",
+      "/images/san-pham-my-nghe/bang-hieu-da/anh8.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/bang-hieu-da/anh1.jpg"
+  },
+  "bon-tam-da": {
+    "name": "Bồn Tắm Đá",
+    "description": "Bồn tắm đá nguyên khối, trải nghiệm nghỉ dưỡng độc đáo trong không gian nội thất cao cấp.",
+    "images": [
+      "/images/san-pham-my-nghe/bon-tam-da/anh1.webp",
+      "/images/san-pham-my-nghe/bon-tam-da/anh4.webp",
+      "/images/san-pham-my-nghe/bon-tam-da/anh5.webp",
+      "/images/san-pham-my-nghe/bon-tam-da/anh6.webp",
+      "/images/san-pham-my-nghe/bon-tam-da/anh7.webp",
+      "/images/san-pham-my-nghe/bon-tam-da/anh8.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/bon-tam-da/anh1.webp"
+  },
+  "den-da": {
+    "name": "Đèn Đá",
+    "description": "Đèn đá sân vườn và nội thất, ánh sáng ấm áp hòa quyện với chất liệu đá tự nhiên.",
+    "images": [
+      "/images/san-pham-my-nghe/den-da/anh1.webp",
+      "/images/san-pham-my-nghe/den-da/anh2.webp",
+      "/images/san-pham-my-nghe/den-da/anh3.webp",
+      "/images/san-pham-my-nghe/den-da/anh4.webp",
+      "/images/san-pham-my-nghe/den-da/anh5.webp",
+      "/images/san-pham-my-nghe/den-da/anh6.webp",
+      "/images/san-pham-my-nghe/den-da/anh7.webp",
+      "/images/san-pham-my-nghe/den-da/anh8.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/den-da/anh1.webp"
+  },
+  "lavabo-da": {
+    "name": "Lavabo Đá",
+    "description": "Lavabo đá tuyết sơn và đá tự nhiên, lựa chọn độc đáo cho phòng tắm, spa.",
+    "images": [
+      "/images/san-pham-my-nghe/lavabo-da/anh1.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh2.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh3.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh4.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh5.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh6.webp",
+      "/images/san-pham-my-nghe/lavabo-da/anh7.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/lavabo-da/anh1.webp"
+  },
+  "tuong-da": {
+    "name": "Tượng Đá",
+    "description": "Tượng đá nghệ thuật và phong thủy, điêu khắc thủ công từ đá tự nhiên chọn lọc.",
+    "images": [
+      "/images/san-pham-my-nghe/tuong-da/anh1.webp",
+      "/images/san-pham-my-nghe/tuong-da/anh4.webp",
+      "/images/san-pham-my-nghe/tuong-da/anh5.webp",
+      "/images/san-pham-my-nghe/tuong-da/anh6.webp",
+      "/images/san-pham-my-nghe/tuong-da/anh7.webp",
+      "/images/san-pham-my-nghe/tuong-da/anh8.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/tuong-da/anh1.webp"
+  },
+  "thach-my-nghe": {
+    "name": "Thạch Mỹ Nghệ",
+    "description": "Thạch mỹ nghệ – những tuyệt tác đá quý được chế tác tinh tế cho không gian sống.",
+    "images": [
+      "/images/san-pham-my-nghe/thach-my-nghe/anh1.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh2.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh3.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh4.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh5.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh6.webp",
+      "/images/san-pham-my-nghe/thach-my-nghe/anh7.webp"
+    ],
+    "cover": "/images/san-pham-my-nghe/thach-my-nghe/anh1.webp"
+  }
+}

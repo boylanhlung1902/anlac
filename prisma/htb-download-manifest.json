@@ -1,0 +1,172 @@
+{
+  "home": [
+    "/images/hathienbao/home/bg1.webp",
+    "/images/hathienbao/home/bg2.webp",
+    "/images/hathienbao/home/bg3.webp",
+    "/images/hathienbao/home/bg4.webp",
+    "/images/hathienbao/home/bg5.webp",
+    "/images/hathienbao/home/bg6.webp",
+    "/images/hathienbao/home/bg7.webp",
+    "/images/hathienbao/home/bg8.webp"
+  ],
+  "cau-chuyen": [
+    "/images/hathienbao/cau-chuyen/anh1.webp",
+    "/images/hathienbao/cau-chuyen/anh2.webp",
+    "/images/hathienbao/cau-chuyen/anh3.webp",
+    "/images/hathienbao/cau-chuyen/anh4.webp",
+    "/images/hathienbao/cau-chuyen/anh5.webp",
+    "/images/hathienbao/cau-chuyen/anh6.webp",
+    "/images/hathienbao/cau-chuyen/anh7.webp",
+    "/images/hathienbao/cau-chuyen/anh8.webp"
+  ],
+  "da-phong-thuy": [
+    "/images/hathienbao/da-phong-thuy/anh1.webp",
+    "/images/hathienbao/da-phong-thuy/anh2.webp",
+    "/images/hathienbao/da-phong-thuy/anh3.webp",
+    "/images/hathienbao/da-phong-thuy/anh4.webp",
+    "/images/hathienbao/da-phong-thuy/anh5.webp",
+    "/images/hathienbao/da-phong-thuy/anh6.webp",
+    "/images/hathienbao/da-phong-thuy/anh7.webp",
+    "/images/hathienbao/da-phong-thuy/anh8.webp"
+  ],
+  "da-san-ho": [
+    "/images/hathienbao/da-san-ho/anh1.webp",
+    "/images/hathienbao/da-san-ho/anh2.webp",
+    "/images/hathienbao/da-san-ho/anh3.webp",
+    "/images/hathienbao/da-san-ho/anh4.webp",
+    "/images/hathienbao/da-san-ho/anh5.webp",
+    "/images/hathienbao/da-san-ho/anh6.webp",
+    "/images/hathienbao/da-san-ho/anh7.webp",
+    "/images/hathienbao/da-san-ho/anh8.webp"
+  ],
+  "go-hoa-thach": [
+    "/images/hathienbao/go-hoa-thach/anh1.webp",
+    "/images/hathienbao/go-hoa-thach/anh2.webp",
+    "/images/hathienbao/go-hoa-thach/anh3.webp",
+    "/images/hathienbao/go-hoa-thach/anh4.webp",
+    "/images/hathienbao/go-hoa-thach/anh5.webp",
+    "/images/hathienbao/go-hoa-thach/anh6.webp",
+    "/images/hathienbao/go-hoa-thach/anh7.webp",
+    "/images/hathienbao/go-hoa-thach/anh8.webp"
+  ],
+  "da-lua-den": [
+    "/images/hathienbao/da-lua-den/anh1.webp",
+    "/images/hathienbao/da-lua-den/anh2.webp",
+    "/images/hathienbao/da-lua-den/anh3.webp",
+    "/images/hathienbao/da-lua-den/anh4.webp",
+    "/images/hathienbao/da-lua-den/anh5.webp",
+    "/images/hathienbao/da-lua-den/anh6.webp",
+    "/images/hathienbao/da-lua-den/anh7.webp",
+    "/images/hathienbao/da-lua-den/anh8.webp"
+  ],
+  "da-lua-da-sac": [
+    "/images/hathienbao/da-lua-da-sac/anh1.webp",
+    "/images/hathienbao/da-lua-da-sac/anh2.webp",
+    "/images/hathienbao/da-lua-da-sac/anh3.webp",
+    "/images/hathienbao/da-lua-da-sac/anh4.webp",
+    "/images/hathienbao/da-lua-da-sac/anh5.webp",
+    "/images/hathienbao/da-lua-da-sac/anh6.webp",
+    "/images/hathienbao/da-lua-da-sac/anh7.webp",
+    "/images/hathienbao/da-lua-da-sac/anh8.webp"
+  ],
+  "da-tram-tich-xanh": [
+    "/images/hathienbao/da-tram-tich-xanh/anh1.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh2.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh3.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh4.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh5.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh6.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh7.webp",
+    "/images/hathienbao/da-tram-tich-xanh/anh8.webp"
+  ],
+  "da-quang-thach": [
+    "/images/hathienbao/da-quang-thach/anh1.webp",
+    "/images/hathienbao/da-quang-thach/anh2.webp",
+    "/images/hathienbao/da-quang-thach/anh3.webp",
+    "/images/hathienbao/da-quang-thach/anh4.webp",
+    "/images/hathienbao/da-quang-thach/anh5.webp",
+    "/images/hathienbao/da-quang-thach/anh6.webp",
+    "/images/hathienbao/da-quang-thach/anh7.webp",
+    "/images/hathienbao/da-quang-thach/anh8.webp"
+  ],
+  "da-tuyet-son": [
+    "/images/hathienbao/da-tuyet-son/anh1.webp",
+    "/images/hathienbao/da-tuyet-son/anh2.webp",
+    "/images/hathienbao/da-tuyet-son/anh3.webp",
+    "/images/hathienbao/da-tuyet-son/anh4.webp",
+    "/images/hathienbao/da-tuyet-son/anh5.webp",
+    "/images/hathienbao/da-tuyet-son/anh6.webp",
+    "/images/hathienbao/da-tuyet-son/anh7.webp",
+    "/images/hathienbao/da-tuyet-son/anh8.webp"
+  ],
+  "da-da-bao": [
+    "/images/hathienbao/da-da-bao/anh1.webp",
+    "/images/hathienbao/da-da-bao/anh2.webp",
+    "/images/hathienbao/da-da-bao/anh3.webp",
+    "/images/hathienbao/da-da-bao/anh4.webp",
+    "/images/hathienbao/da-da-bao/anh5.webp",
+    "/images/hathienbao/da-da-bao/anh6.webp",
+    "/images/hathienbao/da-da-bao/anh7.webp",
+    "/images/hathienbao/da-da-bao/anh8.webp"
+  ],
+  "da-song-ba": [
+    "/images/hathienbao/da-song-ba/anh1.webp",
+    "/images/hathienbao/da-song-ba/anh2.webp",
+    "/images/hathienbao/da-song-ba/anh3.webp",
+    "/images/hathienbao/da-song-ba/anh4.webp",
+    "/images/hathienbao/da-song-ba/anh5.webp",
+    "/images/hathienbao/da-song-ba/anh6.webp",
+    "/images/hathienbao/da-song-ba/anh7.webp",
+    "/images/hathienbao/da-song-ba/anh8.webp"
+  ],
+  "da-van-go": [
+    "/images/hathienbao/da-van-go/anh1.webp",
+    "/images/hathienbao/da-van-go/anh2.webp",
+    "/images/hathienbao/da-van-go/anh3.webp",
+    "/images/hathienbao/da-van-go/anh4.webp",
+    "/images/hathienbao/da-van-go/anh5.webp",
+    "/images/hathienbao/da-van-go/anh6.webp",
+    "/images/hathienbao/da-van-go/anh7.webp",
+    "/images/hathienbao/da-van-go/anh8.webp"
+  ],
+  "da-bazan": [
+    "/images/hathienbao/da-bazan/anh1.webp",
+    "/images/hathienbao/da-bazan/anh2.webp",
+    "/images/hathienbao/da-bazan/anh3.webp",
+    "/images/hathienbao/da-bazan/anh4.webp",
+    "/images/hathienbao/da-bazan/anh5.webp",
+    "/images/hathienbao/da-bazan/anh6.webp",
+    "/images/hathienbao/da-bazan/anh7.webp",
+    "/images/hathienbao/da-bazan/anh8.webp"
+  ],
+  "soi-thach-anh": [
+    "/images/hathienbao/soi-thach-anh/anh1.webp",
+    "/images/hathienbao/soi-thach-anh/anh2.webp",
+    "/images/hathienbao/soi-thach-anh/anh3.webp",
+    "/images/hathienbao/soi-thach-anh/anh4.webp",
+    "/images/hathienbao/soi-thach-anh/anh5.webp",
+    "/images/hathienbao/soi-thach-anh/anh6.webp",
+    "/images/hathienbao/soi-thach-anh/anh7.webp",
+    "/images/hathienbao/soi-thach-anh/anh8.webp"
+  ],
+  "da-van-thach": [
+    "/images/hathienbao/da-van-thach/anh1.webp",
+    "/images/hathienbao/da-van-thach/anh2.webp",
+    "/images/hathienbao/da-van-thach/anh3.webp",
+    "/images/hathienbao/da-van-thach/anh4.webp",
+    "/images/hathienbao/da-van-thach/anh5.webp",
+    "/images/hathienbao/da-van-thach/anh6.webp",
+    "/images/hathienbao/da-van-thach/anh7.webp",
+    "/images/hathienbao/da-van-thach/anh8.webp"
+  ],
+  "da-co-thach": [
+    "/images/hathienbao/da-co-thach/anh1.webp",
+    "/images/hathienbao/da-co-thach/anh2.webp",
+    "/images/hathienbao/da-co-thach/anh3.webp",
+    "/images/hathienbao/da-co-thach/anh4.webp",
+    "/images/hathienbao/da-co-thach/anh5.webp",
+    "/images/hathienbao/da-co-thach/anh6.webp",
+    "/images/hathienbao/da-co-thach/anh7.webp",
+    "/images/hathienbao/da-co-thach/anh8.webp"
+  ]
+}

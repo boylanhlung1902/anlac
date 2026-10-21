@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>領収書プレビュー | An Lạc Stone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --border:#e6e6e6; --muted:#666; --ok:#0a7d2f; }
+  html, body { margin:0; padding:0; background:#f7f8f9; }
+  body { font-family:'Noto Sans JP','Segoe UI',Arial,sans-serif; color:#111; }
+  .page { max-width: 860px; margin: 24px auto; padding: 24px; }
+  .paper { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px 32px; box-shadow:0 6px 24px rgba(0,0,0,.06); }
+  .title { text-align:center; font-weight:700; font-size:20px; letter-spacing:1px; }
+  .hr { height:1px; background:#e5e5e5; margin:8px 0 16px 0; }
+  .row { display:flex; justify-content:space-between; gap:16px; }
+  .small { font-size:12px; }
+  .right { text-align:right; }
+  .center { text-align:center; }
+  .section { margin-top: 14px; }
+  h3 { margin:0 0 6px 0; font-size:14px; }
+  table { width:100%; border-collapse: collapse; font-size:12px; border:1px solid #333; }
+  thead th { background:transparent; padding:8px 10px; text-align:left; border:1px solid #333; }
+  tbody td { padding:8px 10px; border:1px solid #333; }
+  .box { border:1px solid #333; overflow:hidden; }
+  .totals { display:flex; justify-content:flex-end; margin-top:12px; }
+  .totals .cell { min-width:220px; text-align:right; }
+  .totals .label { font-weight:700; font-size:13px; }
+  .totals .value { font-weight:800; color:#0a7d2f; font-size:16px; }
+  .footer { text-align:center; color:#555; font-size:11px; margin-top:18px; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="paper">
+      <div class="title">領収書</div>
+      <div class="hr"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:8px;white-space:nowrap;overflow:hidden;">
+        <span style="flex-shrink:0;">伝票番号：EXP25100900001</span>
+        <span style="flex-shrink:0;">2025年09月15日</span>
+      </div>
+      <div class="row small" style="align-items:flex-start;">
+        <div>ミヤグニ テスト 様</div>
+        <div style="flex:1; text-align:left; margin-left:450px">
+          <div>株式会社アイザック</div>
+          <div>〒370-0044 群馬県高崎市岩押町12-13</div>
+          <div>登録番号：T4070002006183</div>
+          <div>電話：027-365-0221</div>
+          <div>FAX：027-395-0021</div>
+        </div>
+      </div>
+      <div class="small" style="margin-top:10px;">このたびは、輸出プラットフォームをご利用いただき誠にありがとうございます。</div>
+      <div class="small" style="margin-bottom:14px;">以下の通り領収いたしました。</div>
+
+
+       <!-- 税区分内訳 -->
+        <div class="section">
+         <div>
+           <table style="width:50%;">
+             <thead>
+               <tr>
+                 <th class="left">⾦額（税込</th>
+                 <th class="right">880,000円</th>
+               </tr>
+             </thead>
+           </table>
+         </div>
+       </div>
+
+      <!-- 税区分内訳 -->
+      <div class="section">
+        <h3>支払方法：クレジットカード</h3>
+        <div>
+          <table style="width:66.67%;">
+            <thead>
+              <tr>
+                <th>区分</th>
+                <th class="right">商品金額</th>
+                <th class="right">消費税等</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10％対象</td>
+                <td class="right">792,000円</td>
+                <td class="right">88,000円</td>
+              </tr>
+              <tr>
+                <td>小計</td>
+                <td class="right">792,000円</td>
+                <td class="right">88,000円</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 注文内容 -->
+      <div class="section">
+        <h3>注文内容</h3>
+        <div >
+          <table style="width:50%; border-collapse:collapse; font-size:12px; border:1px solid #333;">
+            <thead>
+              <tr style="background:transparent;">
+                <th style="text-align:left;padding:8px 10px;border:1px solid #333;">受付日</th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid #333;font-weight:normal;">2025/09/05</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:8px 10px;border:1px solid #333;font-weight:bold;">受取日</td>
+                <td style="padding:8px 10px;border:1px solid #333;">2025/09/05</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;border:1px solid #333;font-weight:bold;">受取店舗名</td>
+                <td style="padding:8px 10px;border:1px solid #333;">石垣シティ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 明細 -->
+      <div class="section">
+        <h3>明細</h3>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>商品名 (コード)</th>
+                <th class="right">単価</th>
+                <th class="center">数量</th>
+                <th class="right">金額（税抜）</th>
+                <th>税率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Smart Body Clean (2507030000018)</td>
+                <td class="right">792,000</td>
+                <td class="center">1</td>
+                <td class="right">792,000</td>
+                <td>10％</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
