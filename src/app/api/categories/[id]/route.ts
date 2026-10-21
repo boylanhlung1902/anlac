@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../../lib/database'
+import { findCatalogCategory, readFromDatabase } from '../../../../../lib/catalog'
 
 export async function GET(
   request: NextRequest,
@@ -19,17 +20,20 @@ export async function GET(
       )
     }
 
-    const category = await prisma.category.findUnique({
-      where: { id },
-      include: {
-        products: {
-          where: { isActive: true },
-          orderBy: {
-            createdAt: 'desc'
+    const loaded = await readFromDatabase((db) =>
+      db.category.findUnique({
+        where: { id },
+        include: {
+          products: {
+            where: { isActive: true },
+            orderBy: {
+              createdAt: 'desc'
+            }
           }
         }
-      }
-    })
+      })
+    )
+    const category = loaded.ok ? loaded.value : findCatalogCategory(id)
 
     if (!category) {
       return NextResponse.json(

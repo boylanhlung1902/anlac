@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/database'
+import { queryCatalogProducts, readFromDatabase } from '../../../../lib/catalog'
 
 export async function GET(request: NextRequest) {
   try {
@@ -77,34 +78,52 @@ export async function GET(request: NextRequest) {
     const dbField = sortFieldMap[sortBy] || 'createdAt'
     orderBy[dbField] = sortOrder
 
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: {
-          category: true
-        },
-        orderBy,
-        skip,
-        take: limit
-      }),
-      prisma.product.count({ where })
-    ])
+    const loaded = await readFromDatabase(async (db) => {
+      const [products, total] = await Promise.all([
+        db.product.findMany({
+          where,
+          include: {
+            category: true
+          },
+          orderBy,
+          skip,
+          take: limit
+        }),
+        db.product.count({ where })
+      ])
+      return { products, total }
+    })
 
-    const totalPages = Math.ceil(total / limit)
+    if (loaded.ok) {
+      const { products, total } = loaded.value
+      const totalPages = Math.ceil(total / limit)
+      return NextResponse.json({
+        success: true,
+        data: {
+          products,
+          pagination: {
+            page,
+            limit,
+            total,
+            totalPages,
+            hasNext: page < totalPages,
+            hasPrev: page > 1
+          }
+        }
+      })
+    }
 
     return NextResponse.json({
       success: true,
-      data: {
-        products,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages,
-          hasNext: page < totalPages,
-          hasPrev: page > 1
-        }
-      }
+      data: queryCatalogProducts({
+        page,
+        limit,
+        category,
+        search,
+        featured,
+        sortBy,
+        sortOrder,
+      })
     })
   } catch (error) {
     console.error('Error fetching products:', error)

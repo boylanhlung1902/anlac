@@ -13,6 +13,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return NextResponse.json(
+        { success: false, message: 'Chưa cấu hình email trên máy chủ. Thêm EMAIL_USER và EMAIL_PASS trong Environment Variables của Vercel.' },
+        { status: 503 }
+      );
+    }
+
     // Create transporter (using Gmail SMTP)
     const transporter = nodemailer.createTransport({
       service: 'gmail',

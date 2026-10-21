@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../../lib/database'
+import { findCatalogProduct, readFromDatabase } from '../../../../../lib/catalog'
 
 export async function GET(
   request: NextRequest,
@@ -19,12 +20,15 @@ export async function GET(
       )
     }
 
-    const product = await prisma.product.findUnique({
-      where: { id },
-      include: {
-        category: true
-      }
-    })
+    const loaded = await readFromDatabase((db) =>
+      db.product.findUnique({
+        where: { id },
+        include: {
+          category: true
+        }
+      })
+    )
+    const product = loaded.ok ? loaded.value : findCatalogProduct(id)
 
     if (!product) {
       return NextResponse.json(
