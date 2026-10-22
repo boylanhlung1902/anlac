@@ -435,6 +435,46 @@ body {
   font-weight: 700;
 }
 
+.site-header__menu {
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.site-header__menu .nav-link {
+  white-space: nowrap;
+}
+
+@media (min-width: 992px) {
+  .site-header > .container {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 1.5rem;
+  }
+
+  .site-header .navbar-collapse {
+    display: contents !important;
+  }
+
+  .site-header__menu {
+    grid-column: 2;
+    justify-content: center;
+    gap: 2.75rem;
+    margin: 0;
+  }
+
+  .site-header__menu .nav-link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .site-header__tools {
+    grid-column: 3;
+    justify-self: end;
+    margin: 0;
+  }
+}
+
 .nav-icon {
   font-size: 1.2rem;
   margin: 0 0.5rem;
@@ -2652,6 +2692,15 @@ h5.text-success {
   color: var(--taste-soft);
 }
 
+.home-section .taste-kicker,
+.shop-taste__hero .taste-kicker,
+.contact-taste__hero .taste-kicker,
+.about-taste__hero .taste-kicker {
+  color: #f4f8ff !important;
+  -webkit-text-fill-color: #f4f8ff !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
 .taste-welcome-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -2944,6 +2993,15 @@ h5.text-success {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.2s;
+}
+
+.hero-carousel-react__anim--title {
+  color: #e8f1ff !important;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: #e8f1ff !important;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
 .hero-carousel-react__slide.is-active .hero-carousel-react__anim--title {
@@ -4579,6 +4637,16 @@ h5.text-success {
 
 .pdp-taste__info .taste-kicker {
   color: #1a56b0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pdp-taste__info .taste-kicker,
+  .taste-bento__name,
+  .shop-taste__chip,
+  .shop-taste__panel-title {
+    color: #f4f8ff !important;
+    -webkit-text-fill-color: #f4f8ff !important;
+  }
 }
 
 .pdp-taste__title {

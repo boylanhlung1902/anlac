@@ -44,7 +44,7 @@ export default function Header() {
       </nav>
 
       {/* Header */}
-      <nav className="navbar navbar-expand-lg navbar-light shadow">
+      <nav className="navbar navbar-expand-lg navbar-light shadow site-header">
         <div className="container d-flex justify-content-between align-items-center">
           <Link className="navbar-brand text-success logo h1 align-self-center" href="/">
             An Lạc Stone
@@ -61,9 +61,8 @@ export default function Header() {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          <div className={`align-self-center navbar-collapse flex-fill d-lg-flex justify-content-lg-between ${isMobileMenuOpen ? 'show' : 'collapse'}`} id="templatemo_main_nav">
-            <div className="flex-fill">
-              <ul className="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+          <div className={`align-self-center navbar-collapse ${isMobileMenuOpen ? 'show' : 'collapse'}`} id="templatemo_main_nav">
+              <ul className="nav navbar-nav site-header__menu">
                 <li className="nav-item">
                   <Link className="nav-link" href="/" onClick={() => setIsMobileMenuOpen(false)}>Trang Chủ</Link>
                 </li>
@@ -77,8 +76,7 @@ export default function Header() {
                   <Link className="nav-link" href="/contact" onClick={() => setIsMobileMenuOpen(false)}>Liên Hệ</Link>
                 </li>
               </ul>
-            </div>
-            <div className="navbar align-self-center d-flex">
+            <div className="navbar align-self-center d-flex site-header__tools">
               <div className="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
                 <div className="input-group">
                   <input type="text" className="form-control" id="inputMobileSearch" placeholder="Tìm kiếm..." />
