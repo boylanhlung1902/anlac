@@ -30,11 +30,12 @@ const carouselData = [
   },
 ]
 
-const INTERVAL_MS = 4500
-const TRANSITION_MS = 700
+const INTERVAL_MS = 5600
+const TRANSITION_MS = 900
 
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [direction, setDirection] = useState(1)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const currentRef = useRef(0)
   const transitioningRef = useRef(false)
@@ -42,6 +43,10 @@ export default function HeroCarousel() {
 
   const goToSlide = useCallback((index: number) => {
     if (transitioningRef.current || index === currentRef.current) return
+
+    const len = carouselData.length
+    const steps = (index - currentRef.current + len) % len
+    setDirection(steps <= len / 2 ? 1 : -1)
 
     transitioningRef.current = true
     setIsTransitioning(true)
@@ -90,7 +95,11 @@ export default function HeroCarousel() {
   }, [goToSlide])
 
   return (
-    <div id="template-mo-zay-hero-carousel" className="hero-carousel-react position-relative">
+    <div
+      id="template-mo-zay-hero-carousel"
+      className="hero-carousel-react position-relative"
+      style={{ ['--hero-dir' as string]: direction }}
+    >
       <div className="hero-carousel-react__stage">
         {carouselData.map((slide, index) => {
           const active = currentSlide === index
@@ -100,50 +109,40 @@ export default function HeroCarousel() {
               className={`hero-carousel-react__slide${active ? ' is-active' : ''}`}
               aria-hidden={!active}
             >
-              <div className="container">
-                <div className="row p-5 align-items-center">
-                  <div className="mx-auto col-md-8 col-lg-6 order-lg-last">
-                    <div className="hero-carousel-react__media">
-                      <Image
-                        src={slide.image}
-                        alt={slide.title}
-                        fill
-                        priority={index === 0}
-                        sizes="(max-width: 991px) 100vw, 40vw"
-                        className="hero-carousel-react__img"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-6 mb-0 d-flex align-items-center">
-                    <div className="hero-carousel-copy hero-carousel-react__anim hero-carousel-react__anim--copy">
-                      <div className="hero-carousel-copy__media" aria-hidden="true">
-                        <Image
-                          src={slide.image}
-                          alt=""
-                          fill
-                          sizes="(max-width: 991px) 100vw, 50vw"
-                          className="hero-carousel-copy__img"
-                        />
-                        <div className="hero-carousel-copy__veil" />
-                      </div>
-                      <div className="hero-carousel-copy__content text-align-left">
-                        <h1 className="h1 text-success hero-carousel-react__anim hero-carousel-react__anim--title">
-                          <b>{slide.title}</b>
-                        </h1>
-                        <h3 className="h2 hero-carousel-react__anim hero-carousel-react__anim--subtitle">
-                          {slide.subtitle}
-                        </h3>
-                        <p className="hero-carousel-react__anim hero-carousel-react__anim--desc">
-                          {slide.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="hero-carousel-react__media">
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className="hero-carousel-react__img"
+                />
+              </div>
+              <div className="hero-carousel-react__veil" aria-hidden="true" />
+              <div className="hero-carousel-react__copy">
+                <p className="hero-carousel-react__kicker">An Lạc Stone</p>
+                <h2 className="hero-carousel-react__title">{slide.title}</h2>
+                <p className="hero-carousel-react__subtitle">{slide.subtitle}</p>
+                <p className="hero-carousel-react__desc">{slide.description}</p>
               </div>
             </div>
           )
         })}
+      </div>
+
+      <div className="hero-carousel-react__dots" role="tablist" aria-label="Chọn slide">
+        {carouselData.map((slide, index) => (
+          <button
+            key={slide.id}
+            type="button"
+            role="tab"
+            className={currentSlide === index ? 'is-active' : ''}
+            aria-selected={currentSlide === index}
+            aria-label={slide.title}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
       </div>
 
       <button
