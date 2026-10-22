@@ -13,25 +13,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    const emailUser = process.env.EMAIL_USER?.trim()
+    const emailPass = process.env.EMAIL_PASS?.replace(/\s+/g, '')
+
+    if (!emailUser || !emailPass) {
       return NextResponse.json(
         { success: false, message: 'Chưa cấu hình email trên máy chủ. Thêm EMAIL_USER và EMAIL_PASS trong Environment Variables của Vercel.' },
         { status: 503 }
       );
     }
 
-    // Create transporter (using Gmail SMTP)
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.EMAIL_USER, // Gmail address
-        pass: process.env.EMAIL_PASS  // App password from Gmail
-      }
+        user: emailUser,
+        pass: emailPass,
+      },
     });
 
     // Email content
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: emailUser,
       to: 'hoangminhtrung1902@gmail.com',
       subject: subject ? `[Liên hệ] ${subject} - ${name}` : `Liên hệ từ khách hàng: ${name}`,
       html: `
@@ -88,9 +92,15 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error sending email:', error);
+    const authFailed = typeof error === 'object' && error !== null && 'code' in error && error.code === 'EAUTH';
     return NextResponse.json(
-      { success: false, message: 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.' },
-      { status: 500 }
+      {
+        success: false,
+        message: authFailed
+          ? 'Gmail từ chối đăng nhập. Hãy tạo App Password mới và cập nhật EMAIL_PASS trên Vercel.'
+          : 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.',
+      },
+      { status: authFailed ? 502 : 500 }
     );
   }
 }

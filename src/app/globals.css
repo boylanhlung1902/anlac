@@ -1497,6 +1497,8 @@ h5.text-success {
 }
 .contact-modal {
   background: #fff;
+  color: #212529;
+  color-scheme: light;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   padding: 2rem 1.5rem 1.5rem 1.5rem;
@@ -1504,6 +1506,24 @@ h5.text-success {
   max-width: 90vw;
   position: relative;
   animation: fadeInUp 0.4s;
+}
+.contact-modal h4,
+.contact-modal .form-label {
+  color: #212529 !important;
+}
+.contact-modal .form-control {
+  background-color: #fff !important;
+  border: 1px solid #ced4da !important;
+  color: #212529 !important;
+}
+.contact-modal .form-control:focus {
+  background-color: #fff !important;
+  border-color: #1a56b0 !important;
+  color: #212529 !important;
+  box-shadow: 0 0 0 0.2rem rgba(26, 86, 176, 0.2) !important;
+}
+.contact-modal .form-control::placeholder {
+  color: #6c757d !important;
 }
 .contact-modal-close {
   position: absolute;
