@@ -1,5 +1,58 @@
+import { createHash } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+
+function unwrapEnv(value: string) {
+  const trimmed = value.trim().replace(/[\u200B-\u200D\uFEFF]/g, '');
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
+}
+
+function readGmailAuth() {
+  const rawPass = process.env.EMAIL_PASS || '';
+  const user = unwrapEnv(process.env.EMAIL_USER || '').toLowerCase();
+  const pass = unwrapEnv(rawPass).replace(/[^a-z]/gi, '').toLowerCase();
+  return { user, pass, rawPassLength: rawPass.length };
+}
+
+function mailFingerprint(user: string, pass: string) {
+  return createHash('sha256').update(`${user}\n${pass}`).digest('hex').slice(0, 12);
+}
+
+async function sendGmail(mail: nodemailer.SendMailOptions, user: string, pass: string) {
+  const attempts = [
+    { host: 'smtp.gmail.com', port: 465, secure: true },
+    { host: 'smtp.gmail.com', port: 587, secure: false },
+  ];
+  let lastError: unknown;
+
+  for (const attempt of attempts) {
+    const transporter = nodemailer.createTransport({
+      host: attempt.host,
+      port: attempt.port,
+      secure: attempt.secure,
+      auth: { user, pass },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
+    });
+    try {
+      await transporter.sendMail(mail);
+      return;
+    } catch (error) {
+      lastError = error;
+      const code = typeof error === 'object' && error !== null && 'code' in error ? error.code : '';
+      if (code !== 'EAUTH') throw error;
+    }
+  }
+
+  throw lastError;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,25 +66,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailUser = process.env.EMAIL_USER?.trim()
-    const emailPass = process.env.EMAIL_PASS?.replace(/\s+/g, '')
+    const { user: emailUser, pass: emailPass, rawPassLength } = readGmailAuth();
 
-    if (!emailUser || !emailPass) {
+    if (!emailUser || emailPass.length !== 16) {
       return NextResponse.json(
-        { success: false, message: 'Chưa cấu hình email trên máy chủ. Thêm EMAIL_USER và EMAIL_PASS trong Environment Variables của Vercel.' },
+        {
+          success: false,
+          message: 'EMAIL_PASS trên Vercel không phải App Password 16 ký tự.',
+          passLength: emailPass.length,
+          rawPassLength,
+          userHash: createHash('sha256').update(emailUser).digest('hex').slice(0, 8),
+        },
         { status: 503 }
       );
     }
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: emailUser,
-        pass: emailPass,
-      },
-    });
 
     // Email content
     const mailOptions = {
@@ -82,8 +130,7 @@ export async function POST(request: NextRequest) {
       `
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    await sendGmail(mailOptions, emailUser, emailPass);
 
     return NextResponse.json(
       { success: true, message: 'Email đã được gửi thành công!' },
@@ -93,12 +140,21 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error sending email:', error);
     const authFailed = typeof error === 'object' && error !== null && 'code' in error && error.code === 'EAUTH';
+    const { user, pass, rawPassLength } = readGmailAuth();
     return NextResponse.json(
       {
         success: false,
         message: authFailed
-          ? 'Gmail từ chối đăng nhập. Hãy tạo App Password mới và cập nhật EMAIL_PASS trên Vercel.'
+          ? 'Gmail từ chối đăng nhập từ máy chủ Vercel.'
           : 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.',
+        ...(authFailed
+          ? {
+              passLength: pass.length,
+              rawPassLength,
+              userHash: createHash('sha256').update(user).digest('hex').slice(0, 8),
+              mailFingerprint: mailFingerprint(user, pass),
+            }
+          : {}),
       },
       { status: authFailed ? 502 : 500 }
     );
