@@ -3,7 +3,26 @@ import catalog from '../data/catalog.json'
 
 const prisma = new PrismaClient()
 
+async function releaseTakenSlug(
+  table: 'categories' | 'products',
+  slug: string,
+  id: number
+) {
+  await prisma.$executeRawUnsafe(
+    `UPDATE ${table} SET slug = slug || '-retired-' || id WHERE slug = $1 AND id <> $2`,
+    slug,
+    id
+  )
+}
+
 async function main() {
+  for (const category of catalog.categories) {
+    await releaseTakenSlug('categories', category.slug, category.id)
+  }
+  for (const product of catalog.products) {
+    await releaseTakenSlug('products', product.slug, product.id)
+  }
+
   for (const category of catalog.categories) {
     const data = {
       name: category.name,
@@ -56,6 +75,38 @@ async function main() {
       },
     })
   }
+
+  const categoryIds = catalog.categories.map((category) => category.id)
+  const productIds = catalog.products.map((product) => product.id)
+
+  const staleProducts = await prisma.product.findMany({
+    where: { id: { notIn: productIds } },
+    select: { id: true, _count: { select: { orderItems: true } } },
+  })
+  const removableIds = staleProducts
+    .filter((product) => product._count.orderItems === 0)
+    .map((product) => product.id)
+  const archivedIds = staleProducts
+    .filter((product) => product._count.orderItems > 0)
+    .map((product) => product.id)
+
+  if (removableIds.length > 0) {
+    await prisma.cartItem.deleteMany({ where: { productId: { in: removableIds } } })
+    await prisma.product.deleteMany({ where: { id: { in: removableIds } } })
+  }
+  if (archivedIds.length > 0) {
+    await prisma.product.updateMany({
+      where: { id: { in: archivedIds } },
+      data: { isActive: false },
+    })
+  }
+
+  await prisma.category.deleteMany({
+    where: {
+      id: { notIn: categoryIds },
+      products: { none: {} },
+    },
+  })
 
   await prisma.$executeRawUnsafe(
     `SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE((SELECT MAX(id) FROM categories), 1))`

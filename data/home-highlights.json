@@ -1,0 +1,153 @@
+{
+  "categories": [
+    {
+      "name": "Tượng Phật Thích Ca",
+      "slug": "tuong-phat-thich-ca",
+      "image": "/images/anlac/tuong-phat-thich-ca/001.jpg",
+      "icon": "fa-place-of-worship",
+      "count": 34
+    },
+    {
+      "name": "Tượng chú tiểu",
+      "slug": "tuong-chu-tieu",
+      "image": "/images/anlac/tuong-chu-tieu/001.jpg",
+      "icon": "fa-child",
+      "count": 59
+    },
+    {
+      "name": "Đèn đá",
+      "slug": "den-da",
+      "image": "/images/anlac/den-da/001.jpg",
+      "icon": "fa-lightbulb",
+      "count": 37
+    },
+    {
+      "name": "Đài phun nước",
+      "slug": "dai-phun-nuoc",
+      "image": "/images/anlac/dai-phun-nuoc/001.jpg",
+      "icon": "fa-water",
+      "count": 30
+    },
+    {
+      "name": "Tượng Di Lặc",
+      "slug": "tuong-di-lac",
+      "image": "/images/anlac/tuong-di-lac/001.jpg",
+      "icon": "fa-smile",
+      "count": 23
+    },
+    {
+      "name": "Tượng Kỳ Lân",
+      "slug": "tuong-ky-lan",
+      "image": "/images/anlac/tuong-ky-lan/001.jpg",
+      "icon": "fa-shield-alt",
+      "count": 15
+    },
+    {
+      "name": "Điêu khắc chân dung",
+      "slug": "dieu-khac-chan-dung",
+      "image": "/images/anlac/dieu-khac-chan-dung/001.jpg",
+      "icon": "fa-user",
+      "count": 8
+    },
+    {
+      "name": "Tượng cô gái",
+      "slug": "tuong-co-gai",
+      "image": "/images/anlac/tuong-co-gai/001.jpg",
+      "icon": "fa-female",
+      "count": 8
+    },
+    {
+      "name": "Tượng thiên thần",
+      "slug": "tuong-thien-than",
+      "image": "/images/anlac/tuong-thien-than/001.jpg",
+      "icon": "fa-feather-alt",
+      "count": 7
+    },
+    {
+      "name": "Ếch đá phong thuỷ",
+      "slug": "ech-da-phong-thuy",
+      "image": "/images/anlac/ech-da-phong-thuy/001.jpg",
+      "icon": "fa-frog",
+      "count": 6
+    },
+    {
+      "name": "Tượng Tỳ Hưu",
+      "slug": "tuong-ty-huu",
+      "image": "/images/anlac/tuong-ty-huu/001.jpg",
+      "icon": "fa-paw",
+      "count": 5
+    },
+    {
+      "name": "Phù điêu",
+      "slug": "phu-dieu",
+      "image": "/images/anlac/phu-dieu/001.jpg",
+      "icon": "fa-border-all",
+      "count": 3
+    },
+    {
+      "name": "Quả cầu đá",
+      "slug": "qua-cau-da",
+      "image": "/images/anlac/qua-cau-da/001.jpg",
+      "icon": "fa-circle",
+      "count": 2
+    },
+    {
+      "name": "Tượng Quan Âm",
+      "slug": "tuong-quan-am",
+      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "icon": "fa-praying-hands",
+      "count": 2
+    },
+    {
+      "name": "Tượng rồng",
+      "slug": "tuong-rong",
+      "image": "/images/anlac/tuong-rong/001.jpg",
+      "icon": "fa-dragon",
+      "count": 1
+    },
+    {
+      "name": "Tượng cá",
+      "slug": "tuong-ca",
+      "image": "/images/anlac/tuong-ca/001.jpg",
+      "icon": "fa-fish",
+      "count": 1
+    },
+    {
+      "name": "Đồ đá khác",
+      "slug": "do-da-khac",
+      "image": "/images/anlac/do-da-khac/001.jpg",
+      "icon": "fa-gem",
+      "count": 1
+    },
+    {
+      "name": "Ảnh tổng hợp",
+      "slug": "anh-tong-hop",
+      "image": "/images/anlac/anh-tong-hop/001.jpg",
+      "icon": "fa-images",
+      "count": 2
+    }
+  ],
+  "featured": [
+    {
+      "id": 1,
+      "name": "Tượng Phật Thích Ca",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/tuong-phat-thich-ca/001.jpg",
+      "description": "Tượng Phật Thích Ca chế tác từ đá tự nhiên."
+    },
+    {
+      "id": 94,
+      "name": "Đèn đá",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/den-da/001.jpg",
+      "description": "Đèn đá sân vườn và không gian thờ."
+    },
+    {
+      "id": 131,
+      "name": "Đài phun nước",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/dai-phun-nuoc/001.jpg",
+      "description": "Đài phun nước đá cho sân vườn."
+    }
+  ]
+}

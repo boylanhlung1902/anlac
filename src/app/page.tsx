@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useCart } from '@/contexts/CartContext'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useState } from 'react'
+import highlights from '../../data/home-highlights.json'
 
 export default function Home() {
   const { addToCart } = useCart()
@@ -72,80 +73,8 @@ export default function Home() {
     }
   }
 
-  const craftCategories = [
-    {
-      name: 'Bàn Ghế Đá',
-      slug: 'ban-ghe-da',
-      image: '/images/san-pham-my-nghe/ban-ghe-da/anh1.webp',
-      icon: 'fa-chair',
-    },
-    {
-      name: 'Đài Phun Nước',
-      slug: 'dai-phun-nuoc',
-      image: '/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp',
-      icon: 'fa-water',
-    },
-    {
-      name: 'Bảng Hiệu Đá',
-      slug: 'bang-hieu-da',
-      image: '/images/san-pham-my-nghe/bang-hieu-da/anh1.jpg',
-      icon: 'fa-sign',
-    },
-    {
-      name: 'Bồn Tắm Đá',
-      slug: 'bon-tam-da',
-      image: '/images/san-pham-my-nghe/bon-tam-da/anh1.webp',
-      icon: 'fa-bath',
-    },
-    {
-      name: 'Đèn Đá',
-      slug: 'den-da',
-      image: '/images/san-pham-my-nghe/den-da/anh1.webp',
-      icon: 'fa-lightbulb',
-    },
-    {
-      name: 'Lavabo Đá',
-      slug: 'lavabo-da',
-      image: '/images/san-pham-my-nghe/lavabo-da/anh1.webp',
-      icon: 'fa-sink',
-    },
-    {
-      name: 'Tượng Đá',
-      slug: 'tuong-da',
-      image: '/images/san-pham-my-nghe/tuong-da/anh1.webp',
-      icon: 'fa-sculpture',
-    },
-    {
-      name: 'Thạch Mỹ Nghệ',
-      slug: 'thach-my-nghe',
-      image: '/images/san-pham-my-nghe/thach-my-nghe/anh1.webp',
-      icon: 'fa-gem',
-    },
-  ]
-
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Tượng Đá Nghệ Thuật',
-      price: '6,500,000 VNĐ',
-      image: '/images/san-pham-my-nghe/tuong-da/anh1.webp',
-      description: 'Tượng đá tự nhiên mang điểm nhấn bình an cho không gian sống.',
-    },
-    {
-      id: 2,
-      name: 'Đèn Đá Sân Vườn',
-      price: '3,200,000 VNĐ',
-      image: '/images/san-pham-my-nghe/den-da/anh1.webp',
-      description: 'Ánh sáng ấm trên đá tự nhiên, phù hợp sân vườn và góc thiền.',
-    },
-    {
-      id: 3,
-      name: 'Đài Phun Nước Đá',
-      price: '9,800,000 VNĐ',
-      image: '/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp',
-      description: 'Âm thanh nước và vẻ đẹp phong thủy cho sân vườn.',
-    },
-  ]
+  const craftCategories = highlights.categories
+  const featuredProducts = highlights.featured
 
   const stats = [
     { value: '500+', label: 'Sản phẩm đá quý', icon: 'fa-gem' },
@@ -246,7 +175,7 @@ export default function Home() {
           <div className="taste-featured">
             <Reveal className="taste-featured__primary">
               <article className="taste-featured-card taste-featured-card--large">
-                <Link href="/shop" className="taste-featured-card__media">
+                <Link href={`/shop-single/${featuredProducts[0].id}`} className="taste-featured-card__media">
                   <Image
                     src={featuredProducts[0].image}
                     alt={featuredProducts[0].name}
@@ -258,7 +187,7 @@ export default function Home() {
                 </Link>
                 <div className="taste-featured-card__body">
                   <h3 className="taste-featured-card__title">
-                    <Link href="/shop">{featuredProducts[0].name}</Link>
+                    <Link href={`/shop-single/${featuredProducts[0].id}`}>{featuredProducts[0].name}</Link>
                   </h3>
                   <p className="taste-featured-card__desc">{featuredProducts[0].description}</p>
                   <p className="taste-featured-card__price">{featuredProducts[0].price}</p>
@@ -290,7 +219,7 @@ export default function Home() {
               {featuredProducts.slice(1).map((product, index) => (
                 <Reveal key={product.id} delayMs={(index + 1) * 80}>
                   <article className="taste-featured-card taste-featured-card--compact">
-                    <Link href="/shop" className="taste-featured-card__media">
+                    <Link href={`/shop-single/${product.id}`} className="taste-featured-card__media">
                       <Image
                         src={product.image}
                         alt={product.name}
@@ -301,7 +230,7 @@ export default function Home() {
                     </Link>
                     <div className="taste-featured-card__body">
                       <h3 className="taste-featured-card__title">
-                        <Link href="/shop">{product.name}</Link>
+                        <Link href={`/shop-single/${product.id}`}>{product.name}</Link>
                       </h3>
                       <p className="taste-featured-card__price">{product.price}</p>
                       <div className="taste-featured-card__actions">

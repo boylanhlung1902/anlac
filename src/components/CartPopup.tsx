@@ -28,8 +28,9 @@ export default function CartPopup({ isOpen, onClose, cartItems, onUpdateQuantity
   useEffect(() => {
     const items = cartItems.reduce((sum, item) => sum + item.quantity, 0)
     const price = cartItems.reduce((sum, item) => {
-      const priceValue = parseInt(item.price.replace(/[^\d]/g, ''))
-      return sum + (priceValue * item.quantity)
+      const digits = item.price.replace(/[^\d]/g, '')
+      const priceValue = digits ? parseInt(digits, 10) : 0
+      return sum + priceValue * item.quantity
     }, 0)
     
     setTotalItems(items)

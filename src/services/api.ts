@@ -200,7 +200,10 @@ export const categoryAPI = {
 }
 
 // Utility functions
+export const QUOTE_PRICE_LABEL = 'Liên hệ để báo giá'
+
 export const formatPrice = (price: number, currency: 'USD' | 'VND' = 'VND'): string => {
+  if (!price || price <= 0) return QUOTE_PRICE_LABEL
   if (currency === 'USD') {
     return `$${price.toFixed(2)}`
   }
@@ -208,7 +211,13 @@ export const formatPrice = (price: number, currency: 'USD' | 'VND' = 'VND'): str
 }
 
 export const formatPriceVND = (priceVND: number): string => {
+  if (!priceVND || priceVND <= 0) return QUOTE_PRICE_LABEL
   return `${priceVND.toLocaleString('vi-VN')} VNĐ`
+}
+
+export const parseDisplayedPrice = (price: string): number => {
+  const digits = price.replace(/[^\d]/g, '')
+  return digits ? parseInt(digits, 10) : 0
 }
 
 export const convertVNDToUSD = (vndAmount: number): number => {

@@ -87,8 +87,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      const priceValue = parseInt(item.price.replace(/[^\d]/g, ''))
-      return total + (priceValue * item.quantity)
+      const digits = item.price.replace(/[^\d]/g, '')
+      const priceValue = digits ? parseInt(digits, 10) : 0
+      return total + priceValue * item.quantity
     }, 0)
   }
 

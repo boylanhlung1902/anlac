@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import highlights from '../../data/home-highlights.json'
 
 export default function Footer() {
   return (
@@ -32,13 +33,13 @@ export default function Footer() {
           <div className="col-12 col-md-6 pt-5">
             <h2 className="h2 text-light border-bottom pb-3 border-light">Sản Phẩm</h2>
             <ul className="list-unstyled text-light footer-link-list">
-              <li><a className="text-decoration-none" href="#">Tượng Đá</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Phong Thủy</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Cảnh Trang Trí</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Quý</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Bán Quý</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Tự Nhiên</a></li>
-              <li><a className="text-decoration-none" href="#">Đá Nhân Tạo</a></li>
+              {highlights.categories.map((category) => (
+                <li key={category.slug}>
+                  <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -73,10 +74,13 @@ export default function Footer() {
           <div className="col-12 col-sm-6 col-lg-3">
             <h5 className="mb-3 footer-heading">Danh Mục</h5>
             <ul className="list-unstyled">
-              <li className="">Tượng Đá</li>
-              <li className="">Đá Phong Thủy</li>
-              <li className="">Đá Cảnh Trang Trí</li>
-              <li className="">Đá Quý</li>
+              {highlights.categories.slice(0, 6).map((category) => (
+                <li key={category.slug}>
+                  <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
