@@ -11,6 +11,27 @@ import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { productAPI, categoryAPI, Product, Category, formatPriceVND } from '@/services/api'
 
+function pageWindow(current: number, total: number): Array<number | 'gap'> {
+  const sibling = 1
+  const pages = (start: number, end: number) =>
+    Array.from({ length: end - start + 1 }, (_, index) => start + index)
+
+  if (total <= sibling * 2 + 5) return pages(1, total)
+
+  const left = Math.max(current - sibling, 1)
+  const right = Math.min(current + sibling, total)
+  const showLeftGap = left > 2
+  const showRightGap = right < total - 1
+
+  if (!showLeftGap && showRightGap) {
+    return [...pages(1, 3 + sibling * 2), 'gap', total]
+  }
+  if (showLeftGap && !showRightGap) {
+    return [1, 'gap', ...pages(total - (2 + sibling * 2), total)]
+  }
+  return [1, 'gap', ...pages(left, right), 'gap', total]
+}
+
 function ShopContent() {
   const { addToCart } = useCart()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
@@ -427,34 +448,45 @@ function ShopContent() {
                 <nav className="shop-taste__pager" aria-label="Phân trang sản phẩm">
                   <button
                     type="button"
-                    className="shop-taste__page-btn"
+                    className="shop-taste__page-btn shop-taste__page-btn--nav"
                     onClick={() => handlePageChange(pagination.page - 1)}
                     disabled={!pagination.hasPrev}
+                    aria-label="Trang trước"
                   >
-                    Trước
+                    <i className="fas fa-chevron-left" aria-hidden="true" />
+                    <span className="shop-taste__page-label">Trước</span>
                   </button>
                   <div className="shop-taste__page-list">
-                    {[...Array(pagination.totalPages)].map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        className={`shop-taste__page-btn ${
-                          pagination.page === i + 1 ? 'is-active' : ''
-                        }`}
-                        onClick={() => handlePageChange(i + 1)}
-                        aria-current={pagination.page === i + 1 ? 'page' : undefined}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+                    {pageWindow(pagination.page, pagination.totalPages).map((item, index) =>
+                      item === 'gap' ? (
+                        <span key={`gap-${index}`} className="shop-taste__page-gap" aria-hidden="true">
+                          …
+                        </span>
+                      ) : (
+                        <button
+                          key={item}
+                          type="button"
+                          className={`shop-taste__page-btn ${
+                            pagination.page === item ? 'is-active' : ''
+                          }`}
+                          onClick={() => handlePageChange(item)}
+                          aria-label={`Trang ${item}`}
+                          aria-current={pagination.page === item ? 'page' : undefined}
+                        >
+                          {item}
+                        </button>
+                      )
+                    )}
                   </div>
                   <button
                     type="button"
-                    className="shop-taste__page-btn"
+                    className="shop-taste__page-btn shop-taste__page-btn--nav"
                     onClick={() => handlePageChange(pagination.page + 1)}
                     disabled={!pagination.hasNext}
+                    aria-label="Trang sau"
                   >
-                    Sau
+                    <span className="shop-taste__page-label">Sau</span>
+                    <i className="fas fa-chevron-right" aria-hidden="true" />
                   </button>
                 </nav>
               )}

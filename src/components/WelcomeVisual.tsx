@@ -6,28 +6,28 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const WELCOME_SLIDES = [
   {
     main: '/images/clean/hero/slide-3.jpg',
-    accent: '/images/san-pham-my-nghe/tuong-da/anh1.webp',
+    accent: '/images/anlac/dai-phun-nuoc/008.jpg',
     alt: 'Đài phun nước đá An Lạc Stone',
   },
   {
     main: '/images/clean/hero/slide-1.jpg',
-    accent: '/images/san-pham-my-nghe/den-da/anh1.webp',
-    alt: 'Đá tự nhiên vân thạch An Lạc Stone',
+    accent: '/images/clean/hero/slide-2.jpg',
+    alt: 'Đá tự nhiên An Lạc Stone',
   },
   {
     main: '/images/clean/hero/slide-2.jpg',
-    accent: '/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp',
+    accent: '/images/clean/hero/slide-1.jpg',
     alt: 'Đá cảnh thiên nhiên An Lạc Stone',
   },
   {
     main: '/images/san-pham-my-nghe/ban-ghe-da/anh1.webp',
-    accent: '/images/san-pham-my-nghe/lavabo-da/anh1.webp',
+    accent: '/images/san-pham-my-nghe/ban-ghe-da/anh3.jpg',
     alt: 'Bàn ghế đá An Lạc Stone',
   },
   {
     main: '/images/clean/hero/slide-statue.jpg',
-    accent: '/images/san-pham-my-nghe/thach-my-nghe/anh1.webp',
-    alt: 'Tượng đá An Lạc Stone',
+    accent: '/images/anlac/tuong-phat-thich-ca/004.jpg',
+    alt: 'Tượng Phật đá An Lạc Stone',
   },
 ]
 
