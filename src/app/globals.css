@@ -2822,6 +2822,15 @@ h5.text-success {
   transform: scale(1.12);
 }
 
+.taste-welcome__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
 .taste-welcome__scrim {
   position: absolute;
   inset: 0;
@@ -2904,6 +2913,7 @@ h5.text-success {
 
 @media (prefers-reduced-motion: reduce) {
   .taste-welcome__slide,
+  .taste-welcome__video,
   .taste-welcome__accent-slide,
   .taste-welcome__dot {
     transition: none;

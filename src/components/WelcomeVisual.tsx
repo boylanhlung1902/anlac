@@ -3,40 +3,106 @@
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-const WELCOME_SLIDES = [
+type WelcomeSlide = {
+  alt: string
+  accent: string
+  video: string
+}
+
+const WELCOME_SLIDES: WelcomeSlide[] = [
   {
-    main: '/images/anlac/dai-phun-nuoc/001.jpg',
-    accent: '/images/anlac/dai-phun-nuoc/008.jpg',
-    alt: 'Đài phun nước đá An Lạc Stone',
+    video: '/videos/home/1.mp4',
+    accent: '/images/home/1.jpg',
+    alt: 'Cặp tượng nghê đá',
   },
   {
-    main: '/images/anlac/tuong-phat-thich-ca/012.jpg',
-    accent: '/images/anlac/tuong-phat-thich-ca/020.jpg',
-    alt: 'Tượng Phật đá An Lạc Stone',
+    video: '/videos/home/2.mp4',
+    accent: '/images/home/2.jpg',
+    alt: 'Tượng Phật ngồi thiền',
   },
   {
-    main: '/images/anlac/phu-dieu/001.jpg',
-    accent: '/images/anlac/phu-dieu/002.jpg',
-    alt: 'Phù điêu đá An Lạc Stone',
+    video: '/videos/home/3.mp4',
+    accent: '/images/home/3.jpg',
+    alt: 'Tượng Phật giữa vườn',
   },
   {
-    main: '/images/san-pham-my-nghe/ban-ghe-da/anh1.webp',
-    accent: '/images/san-pham-my-nghe/ban-ghe-da/anh6.webp',
-    alt: 'Bàn ghế đá An Lạc Stone',
+    video: '/videos/home/4.mp4',
+    accent: '/images/home/4.jpg',
+    alt: 'Tượng Phật và Di Lặc',
+  },
+  {
+    video: '/videos/home/5.mp4',
+    accent: '/images/home/5.jpg',
+    alt: 'Bộ tượng chú tiểu',
   },
 ]
 
-const INTERVAL_MS = 2800
+const INTERVAL_MS = 6500
 
 export default function WelcomeVisual() {
   const [index, setIndex] = useState(0)
   const indexRef = useRef(0)
+  const videoRefs = useRef<Array<HTMLVideoElement | null>>([])
 
   const goTo = useCallback((next: number) => {
     const safe = ((next % WELCOME_SLIDES.length) + WELCOME_SLIDES.length) % WELCOME_SLIDES.length
     indexRef.current = safe
     setIndex(safe)
   }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const cleanups: Array<() => void> = []
+
+    videoRefs.current.forEach((video, i) => {
+      if (!video) return
+      video.muted = true
+      video.playsInline = true
+      if (i !== index) {
+        video.pause()
+        return
+      }
+
+      let retries = 0
+      let retryTimer: number | undefined
+      const start = () => {
+        if (cancelled) return
+        video.muted = true
+        const attempt = video.play()
+        if (!attempt) return
+        void attempt.catch(() => {
+          if (cancelled || retries >= 8) return
+          retries += 1
+          retryTimer = window.setTimeout(start, 300)
+        })
+      }
+
+      if (video.currentTime > 0.05) {
+        const onSeeked = () => start()
+        video.addEventListener('seeked', onSeeked, { once: true })
+        video.currentTime = 0
+        cleanups.push(() => {
+          video.removeEventListener('seeked', onSeeked)
+          if (retryTimer) window.clearTimeout(retryTimer)
+        })
+        return
+      }
+
+      if (video.readyState >= 2) start()
+      else {
+        video.addEventListener('canplay', start, { once: true })
+        cleanups.push(() => video.removeEventListener('canplay', start))
+      }
+      cleanups.push(() => {
+        if (retryTimer) window.clearTimeout(retryTimer)
+      })
+    })
+
+    return () => {
+      cancelled = true
+      cleanups.forEach((cleanup) => cleanup())
+    }
+  }, [index])
 
   useEffect(() => {
     let timer: number | undefined
@@ -49,10 +115,7 @@ export default function WelcomeVisual() {
           tick()
           return
         }
-        const next = (indexRef.current + 1) % WELCOME_SLIDES.length
-        indexRef.current = next
-        setIndex(next)
-        tick()
+        goTo(indexRef.current + 1)
       }, INTERVAL_MS)
     }
 
@@ -62,7 +125,7 @@ export default function WelcomeVisual() {
       cancelled = true
       if (timer) window.clearTimeout(timer)
     }
-  }, [])
+  }, [index, goTo])
 
   return (
     <div className="taste-welcome__visual">
@@ -71,7 +134,7 @@ export default function WelcomeVisual() {
           const active = i === index
           return (
             <div
-              key={slide.main}
+              key={slide.video}
               className={`taste-welcome__slide${active ? ' is-active' : ''}`}
               aria-hidden={!active}
               style={{
@@ -81,20 +144,29 @@ export default function WelcomeVisual() {
               }}
             >
               <Image
-                src={slide.main}
+                src={slide.accent}
                 alt=""
                 fill
                 sizes="(max-width: 767px) 100vw, 42vw"
                 className="taste-welcome__img taste-welcome__img--fill"
                 aria-hidden
               />
-              <Image
-                src={slide.main}
-                alt={slide.alt}
-                fill
-                priority={i < 2}
-                sizes="(max-width: 767px) 100vw, 42vw"
-                className="taste-welcome__img"
+              <video
+                ref={(node) => {
+                  videoRefs.current[i] = node
+                  if (!node) return
+                  node.muted = true
+                  node.defaultMuted = true
+                  node.playsInline = true
+                }}
+                className="taste-welcome__video"
+                src={slide.video}
+                poster={slide.accent}
+                autoPlay={i === 0}
+                muted
+                playsInline
+                preload={active || i === (index + 1) % WELCOME_SLIDES.length ? 'auto' : 'metadata'}
+                aria-label={slide.alt}
               />
             </div>
           )
@@ -107,7 +179,7 @@ export default function WelcomeVisual() {
           const active = i === index
           return (
             <div
-              key={`accent-${slide.accent}`}
+              key={`accent-${slide.accent}-${i}`}
               className={`taste-welcome__accent-slide${active ? ' is-active' : ''}`}
               style={{ opacity: active ? 1 : 0 }}
             >
@@ -134,11 +206,11 @@ export default function WelcomeVisual() {
       <div className="taste-welcome__dots" role="tablist" aria-label="Ảnh giới thiệu">
         {WELCOME_SLIDES.map((slide, i) => (
           <button
-            key={`dot-${slide.main}`}
+            key={`dot-${slide.video}`}
             type="button"
             role="tab"
             aria-selected={i === index}
-            aria-label={`Ảnh ${i + 1}`}
+            aria-label={slide.alt}
             className={`taste-welcome__dot${i === index ? ' is-active' : ''}`}
             onClick={() => goTo(i)}
           />
