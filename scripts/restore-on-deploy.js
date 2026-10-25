@@ -17,3 +17,15 @@ execSync('npx tsx prisma/restore-snapshot.ts', {
   stdio: 'inherit',
   env: process.env,
 })
+
+const adminUsername = (process.env.ADMIN_USERNAME || '').trim()
+const adminPassword = process.env.ADMIN_PASSWORD || ''
+if (!adminUsername || !adminPassword) {
+  console.log('Skip admin account: ADMIN_USERNAME or ADMIN_PASSWORD is not set')
+  process.exit(0)
+}
+
+execSync('npx tsx scripts/ensure-admin.ts', {
+  stdio: 'inherit',
+  env: process.env,
+})
