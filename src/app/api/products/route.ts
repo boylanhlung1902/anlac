@@ -11,8 +11,14 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured') === 'true'
     const sortBy = searchParams.get('sortBy') || 'createdAt'
     const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc'
+    const ids = (searchParams.get('ids') || '')
+      .split(',')
+      .map((value) => Number(value))
+      .filter((value, index, all) => Number.isInteger(value) && value > 0 && all.indexOf(value) === index)
+      .slice(0, 48)
 
-    const skip = (page - 1) * limit
+    const skip = ids.length > 0 ? 0 : (page - 1) * limit
+    const take = ids.length > 0 ? ids.length : limit
 
     // Build where clause
     const where: any = {
@@ -57,6 +63,10 @@ export async function GET(request: NextRequest) {
       where.isFeatured = true
     }
 
+    if (ids.length > 0) {
+      where.id = { in: ids }
+    }
+
     // Build orderBy clause
     let orderBy: any = {}
     
@@ -88,7 +98,7 @@ export async function GET(request: NextRequest) {
           },
           orderBy,
           skip,
-          take: limit
+          take,
         }),
         db.product.count({ where })
       ])
@@ -122,6 +132,7 @@ export async function GET(request: NextRequest) {
         category,
         search,
         featured,
+        ids,
         sortBy,
         sortOrder,
       })

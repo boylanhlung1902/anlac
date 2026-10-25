@@ -12,6 +12,7 @@ import { useCart } from '@/contexts/CartContext'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useState } from 'react'
 import highlights from '../../data/home-highlights.json'
+import { useHomeVisibility, visibleHighlights } from '@/lib/home-visibility'
 
 export default function Home() {
   const { addToCart } = useCart()
@@ -73,8 +74,9 @@ export default function Home() {
     }
   }
 
-  const craftCategories = highlights.categories
-  const featuredProducts = highlights.featured
+  const visibility = useHomeVisibility()
+  const craftCategories = visibleHighlights(visibility.status, visibility.categorySlugs, highlights.categories, (category) => category.slug)
+  const featuredProducts = visibleHighlights(visibility.status, visibility.productIds, highlights.featured, (product) => product.id)
   const featuredMore = featuredProducts.slice(3)
 
   const stats = [
@@ -180,7 +182,7 @@ export default function Home() {
             </div>
           </Reveal>
 
-          <div className="taste-featured">
+          {featuredProducts[0] ? <div className="taste-featured">
             <Reveal className="taste-featured__primary">
               <article className="taste-featured-card taste-featured-card--large">
                 <Link href={`/shop-single/${featuredProducts[0].id}`} className="taste-featured-card__media">
@@ -282,7 +284,7 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
-          </div>
+          </div> : null}
 
           {featuredMore.length > 0 && (
             <div className="taste-featured-more">

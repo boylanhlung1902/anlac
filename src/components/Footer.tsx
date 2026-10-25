@@ -4,9 +4,12 @@ import Link from 'next/link'
 import highlights from '../../data/home-highlights.json'
 import { phoneHref } from '@/lib/store-defaults'
 import { useStoreInfo } from '@/lib/use-store'
+import { useHomeVisibility, visibleHighlights } from '@/lib/home-visibility'
 
 export default function Footer() {
   const store = useStoreInfo()
+  const visibility = useHomeVisibility()
+  const categories = visibleHighlights(visibility.status, visibility.categorySlugs, highlights.categories, (category) => category.slug)
   return (
     <footer className="bg-dark" id="tempaltemo_footer">
       <div className="container">
@@ -42,7 +45,7 @@ export default function Footer() {
                 <i className="fas fa-chevron-down" aria-hidden="true" />
               </summary>
               <ul className="list-unstyled text-light footer-link-list">
-                {highlights.categories.map((category) => (
+                {categories.map((category) => (
                   <li key={category.slug}>
                     <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
                       {category.name}
@@ -84,7 +87,7 @@ export default function Footer() {
           <div className="col-12 col-sm-6 col-lg-3">
             <h5 className="mb-3 footer-heading">Danh Mục</h5>
             <ul className="list-unstyled">
-              {highlights.categories.slice(0, 6).map((category) => (
+              {categories.slice(0, 6).map((category) => (
                 <li key={category.slug}>
                   <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
                     {category.name}

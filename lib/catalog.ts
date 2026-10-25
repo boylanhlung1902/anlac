@@ -26,18 +26,25 @@ function includes(value: string | null | undefined, term: string) {
   return (value || '').toLowerCase().includes(term)
 }
 
+function categoryIsHidden(category: unknown) {
+  return Boolean(category && typeof category === 'object' && 'isActive' in category && (category as { isActive?: boolean }).isActive === false)
+}
+
 export function queryCatalogProducts(params: {
   page: number
   limit: number
   category?: string | null
   search?: string | null
   featured?: boolean
+  ids?: number[]
   sortBy?: string
   sortOrder?: string
 }) {
   const page = params.page > 0 ? params.page : 1
   const limit = params.limit > 0 ? params.limit : 12
-  let items = catalog.products.filter((product) => product.isActive)
+  const idSet = params.ids?.length ? new Set(params.ids) : null
+  let items = catalog.products.filter((product) => product.isActive && !categoryIsHidden(product.category))
+  if (idSet) items = items.filter((product) => idSet.has(product.id))
 
   if (params.category) {
     items = items.filter((product) => product.category?.slug === params.category)
@@ -73,9 +80,10 @@ export function queryCatalogProducts(params: {
   const total = items.length
   const totalPages = Math.max(1, Math.ceil(total / limit))
   const start = (page - 1) * limit
+  const products = idSet ? items : items.slice(start, start + limit)
 
   return {
-    products: items.slice(start, start + limit),
+    products,
     pagination: {
       page,
       limit,
@@ -93,6 +101,7 @@ export function findCatalogProduct(id: number) {
 
 export function queryCatalogCategories(includeProducts: boolean) {
   return [...catalog.categories]
+    .filter((category) => !categoryIsHidden(category))
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((category) => {
       if (!includeProducts) return category
