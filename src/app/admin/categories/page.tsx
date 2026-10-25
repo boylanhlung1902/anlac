@@ -28,6 +28,8 @@ export default function CategoriesPage() {
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState(blank)
   const [busy, setBusy] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [uploadNote, setUploadNote] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
   const [pendingDelete, setPendingDelete] = useState<CategoryRow | null>(null)
 
   function load(nextPage = currentPage, nextSearch = search) {
@@ -46,7 +48,33 @@ export default function CategoriesPage() {
   function openEdit(row: CategoryRow) {
     setCreating(false)
     setEditing(row)
+    setUploadNote(null)
     setForm({ name: row.name, slug: row.slug, description: row.description || '', image: row.image || '' })
+  }
+
+  function closeForm() {
+    setCreating(false)
+    setEditing(null)
+    setUploadNote(null)
+  }
+
+  async function uploadPhoto(files: FileList | null) {
+    const file = files?.[0]
+    if (!file) return
+    const body = new FormData()
+    body.append('files', file)
+    setUploading(true)
+    setUploadNote(null)
+    const response = await fetch('/api/admin/uploads', { method: 'POST', body, credentials: 'same-origin' })
+    const payload = await response.json().catch(() => null)
+    setUploading(false)
+    const path = payload?.data?.paths?.[0]
+    if (!response.ok || !payload?.success || typeof path !== 'string') {
+      setUploadNote({ type: 'err', text: payload?.message || 'Không tải được ảnh.' })
+      return
+    }
+    setForm((current) => ({ ...current, image: path }))
+    setUploadNote({ type: 'ok', text: 'Đã tải ảnh. Bấm Lưu để ghi vào danh mục.' })
   }
 
   async function save(event: FormEvent) {
@@ -91,7 +119,7 @@ export default function CategoriesPage() {
       <form className="admin-toolbar" onSubmit={(event) => { event.preventDefault(); setCurrentPage(1); load(1, search) }}>
         <label className="admin-field"><span>Tìm</span><input value={search} onChange={(event) => setSearch(event.target.value)} /></label>
         <button className="admin-btn" type="submit">Lọc</button>
-        <button className="admin-btn" type="button" onClick={() => { setEditing(null); setCreating(true); setForm(blank) }}>Tạo danh mục</button>
+        <button className="admin-btn" type="button" onClick={() => { setEditing(null); setCreating(true); setUploadNote(null); setForm(blank) }}>Tạo danh mục</button>
       </form>
       <div className="admin-table-wrap">
         {rows.length === 0 ? <Empty text="Chưa có danh mục." /> : (
@@ -118,16 +146,43 @@ export default function CategoriesPage() {
       </div>
       {creating || editing ? (
         <div className="admin-dialog" role="dialog" aria-modal="true" aria-label="Danh mục">
-          <button className="admin-dialog__backdrop" type="button" aria-label="Đóng" onClick={() => { setCreating(false); setEditing(null) }} />
+          <button className="admin-dialog__backdrop" type="button" aria-label="Đóng" onClick={closeForm} />
           <form className="admin-dialog__card" onSubmit={save}>
             <h2>{editing ? 'Sửa danh mục' : 'Tạo danh mục'}</h2>
             <label className="admin-field admin-field--wide"><span>Tên</span><input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required /></label>
             <label className="admin-field admin-field--wide"><span>Đường dẫn</span><input value={form.slug} onChange={(event) => setForm({ ...form, slug: event.target.value })} /></label>
             <label className="admin-field admin-field--wide"><span>Mô tả</span><textarea value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} /></label>
-            <label className="admin-field admin-field--wide"><span>Ảnh</span><input value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} placeholder="/images/..." /></label>
+            <div className="admin-field admin-field--wide">
+              <span>Ảnh</span>
+              <div className="admin-photos">
+                {form.image ? (
+                  <figure className="admin-photo">
+                    <img src={form.image} alt="" />
+                    <figcaption>
+                      <button type="button" className="admin-link" onClick={() => setForm({ ...form, image: '' })}>Xóa ảnh</button>
+                    </figcaption>
+                  </figure>
+                ) : <p>Chưa có ảnh.</p>}
+              </div>
+              <label className="admin-btn admin-btn--ghost">
+                {uploading ? 'Đang tải ảnh...' : 'Tải ảnh lên'}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  disabled={uploading || busy}
+                  onChange={(event) => {
+                    const input = event.currentTarget
+                    void uploadPhoto(input.files).finally(() => { input.value = '' })
+                  }}
+                />
+              </label>
+              {uploadNote ? <p className={`admin-note admin-note--${uploadNote.type === 'ok' ? 'ok' : 'err'}`}>{uploadNote.text}</p> : null}
+            </div>
+            <label className="admin-field admin-field--wide"><span>Đường dẫn ảnh</span><input value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} placeholder="/images/..." spellCheck={false} /></label>
             <div className="admin-dialog__actions">
-              <button className="admin-btn admin-btn--ghost" type="button" onClick={() => { setCreating(false); setEditing(null) }}>Hủy</button>
-              <button className="admin-btn" type="submit" disabled={busy}>{busy ? 'Đang lưu...' : 'Lưu'}</button>
+              <button className="admin-btn admin-btn--ghost" type="button" onClick={closeForm}>Hủy</button>
+              <button className="admin-btn" type="submit" disabled={busy || uploading}>{busy ? 'Đang lưu...' : 'Lưu'}</button>
             </div>
           </form>
         </div>

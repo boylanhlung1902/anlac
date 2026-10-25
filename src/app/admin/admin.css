@@ -162,6 +162,42 @@
 .admin-btn--danger { background: #9f2d2d; }
 .admin-link { color: #1a56b0; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
 .admin-link + .admin-link { margin-left: 10px; }
+.admin-app .admin-row-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(84px, 1fr));
+  gap: 6px;
+  width: 180px;
+}
+.admin-app .admin-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 1px solid #c5d2e6;
+  background: #f3f6fb;
+  color: #041434;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.admin-app .admin-chip:hover {
+  background: #e4edf8;
+  color: #041434;
+}
+.admin-app .admin-chip--danger {
+  background: #fff4f4;
+  border-color: #e4b4b4;
+  color: #9f2d2d;
+}
+.admin-app .admin-chip--danger:hover {
+  background: #fde8e8;
+  color: #7d2222;
+}
 
 .admin-table-wrap { padding: 0; overflow: auto; }
 .admin-table { width: 100%; border-collapse: collapse; min-width: 760px; }
@@ -202,7 +238,19 @@
 
 .admin-dialog { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; }
 .admin-dialog__backdrop { position: absolute; inset: 0; background: rgba(4, 20, 52, 0.45); border: 0; }
-.admin-dialog__card { position: relative; width: min(460px, 100%); background: #fff; border-radius: 16px; padding: 20px; }
+.admin-dialog__card {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: #fff;
+  color: #142033;
+  color-scheme: light;
+  border-radius: 16px;
+  padding: 20px;
+}
+form.admin-dialog__card { display: grid; gap: 12px; align-content: start; }
+.admin-dialog__card h2 { margin: 0; }
 .admin-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
 
 @media (max-width: 1100px) {
