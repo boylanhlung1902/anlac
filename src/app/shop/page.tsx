@@ -57,6 +57,11 @@ function ShopContent() {
     hasPrev: false,
   })
   const requestIdRef = useRef(0)
+  const productListRef = useRef<HTMLDivElement>(null)
+
+  const scrollToProductList = () => {
+    productListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const syncUrl = useCallback(
     (next: { category?: string; search?: string; sortBy?: string; sortOrder?: string }) => {
@@ -165,6 +170,9 @@ function ShopContent() {
     setFilters((prev) => ({ ...prev, category: slug }))
     setPagination((prev) => ({ ...prev, page: 1 }))
     syncUrl({ category: slug })
+    if (window.matchMedia('(max-width: 991.98px)').matches) {
+      scrollToProductList()
+    }
   }
 
   const handleSortChange = (value: string) => {
@@ -213,6 +221,7 @@ function ShopContent() {
 
   const handlePageChange = (page: number) => {
     setPagination((prev) => ({ ...prev, page }))
+    scrollToProductList()
   }
 
   const activeCategoryName =
@@ -315,7 +324,7 @@ function ShopContent() {
               </aside>
             </Reveal>
 
-            <div className="shop-taste__content">
+            <div className="shop-taste__content" ref={productListRef}>
               <Reveal>
                 <header className="shop-taste__toolbar">
                   <form className="shop-taste__search" onSubmit={handleSearchSubmit}>

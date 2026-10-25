@@ -108,10 +108,6 @@ export default function Header() {
                   {getTotalItems()}
                 </span>
               </button>
-              <a className="nav-icon position-relative text-decoration-none" href="#">
-                <i className="fa fa-fw fa-heart text-dark mr-3"></i>
-                <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">5</span>
-              </a>
             </div>
           </div>
         </div>
