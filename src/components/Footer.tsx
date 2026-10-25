@@ -31,16 +31,21 @@ export default function Footer() {
           </div>
 
           <div className="col-12 col-md-6 pt-5">
-            <h2 className="h2 text-light border-bottom pb-3 border-light">Sản Phẩm</h2>
-            <ul className="list-unstyled text-light footer-link-list">
-              {highlights.categories.map((category) => (
-                <li key={category.slug}>
-                  <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <details className="footer-products">
+              <summary>
+                <span>Sản Phẩm</span>
+                <i className="fas fa-chevron-down" aria-hidden="true" />
+              </summary>
+              <ul className="list-unstyled text-light footer-link-list">
+                {highlights.categories.map((category) => (
+                  <li key={category.slug}>
+                    <Link className="text-decoration-none text-light" href={`/shop?category=${category.slug}`}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </details>
           </div>
         </div>
 

@@ -94,9 +94,16 @@
     {
       "name": "Tượng Quan Âm",
       "slug": "tuong-quan-am",
-      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "image": "/images/anlac/tuong-quan-am/002.jpg",
       "icon": "fa-praying-hands",
-      "count": 2
+      "count": 1
+    },
+    {
+      "name": "Tượng Thánh",
+      "slug": "tuong-thanh",
+      "image": "/images/anlac/tuong-thanh/001.jpg",
+      "icon": "fa-church",
+      "count": 1
     },
     {
       "name": "Tượng rồng",
@@ -110,13 +117,6 @@
       "slug": "tuong-ca",
       "image": "/images/anlac/tuong-ca/001.jpg",
       "icon": "fa-fish",
-      "count": 1
-    },
-    {
-      "name": "Đồ đá khác",
-      "slug": "do-da-khac",
-      "image": "/images/anlac/do-da-khac/001.jpg",
-      "icon": "fa-gem",
       "count": 1
     },
     {

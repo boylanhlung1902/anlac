@@ -140,12 +140,19 @@ export default function Home() {
                   <div className="taste-bento__media">
                     <Image
                       src={category.image}
+                      alt=""
+                      fill
+                      sizes={index === 0 ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 50vw, 25vw'}
+                      className="taste-bento__img taste-bento__img--fill"
+                      aria-hidden
+                    />
+                    <Image
+                      src={category.image}
                       alt={category.name}
                       fill
                       sizes={index === 0 ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 50vw, 25vw'}
                       className="taste-bento__img"
                     />
-                    <div className="taste-bento__scrim" />
                   </div>
                   <div className="taste-bento__meta">
                     <h3 className="taste-bento__name">{category.name}</h3>
@@ -177,6 +184,14 @@ export default function Home() {
             <Reveal className="taste-featured__primary">
               <article className="taste-featured-card taste-featured-card--large">
                 <Link href={`/shop-single/${featuredProducts[0].id}`} className="taste-featured-card__media">
+                  <Image
+                    src={featuredProducts[0].image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 991px) 100vw, 58vw"
+                    className="taste-featured-card__img taste-featured-card__img--fill"
+                    aria-hidden
+                  />
                   <Image
                     src={featuredProducts[0].image}
                     alt={featuredProducts[0].name}
@@ -223,6 +238,14 @@ export default function Home() {
                     <Link href={`/shop-single/${product.id}`} className="taste-featured-card__media">
                       <Image
                         src={product.image}
+                        alt=""
+                        fill
+                        sizes="(max-width: 991px) 100vw, 40vw"
+                        className="taste-featured-card__img taste-featured-card__img--fill"
+                        aria-hidden
+                      />
+                      <Image
+                        src={product.image}
                         alt={product.name}
                         fill
                         sizes="(max-width: 991px) 100vw, 40vw"
@@ -267,6 +290,14 @@ export default function Home() {
                 <Reveal key={product.id} delayMs={(index % 3) * 60}>
                   <article className="taste-featured-card taste-featured-card--tile">
                     <Link href={`/shop-single/${product.id}`} className="taste-featured-card__media">
+                      <Image
+                        src={product.image}
+                        alt=""
+                        fill
+                        sizes="(max-width: 575px) 100vw, (max-width: 991px) 50vw, 33vw"
+                        className="taste-featured-card__img taste-featured-card__img--fill"
+                        aria-hidden
+                      />
                       <Image
                         src={product.image}
                         alt={product.name}

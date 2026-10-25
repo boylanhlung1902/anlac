@@ -112,6 +112,14 @@ export default function HeroCarousel() {
               <div className="hero-carousel-react__media">
                 <Image
                   src={slide.image}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="hero-carousel-react__img hero-carousel-react__img--fill"
+                  aria-hidden
+                />
+                <Image
+                  src={slide.image}
                   alt={slide.title}
                   fill
                   priority={index === 0}

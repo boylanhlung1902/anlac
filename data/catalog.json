@@ -121,10 +121,10 @@
       "id": 14,
       "name": "Tượng Quan Âm",
       "description": "Tượng Quan Âm đá.",
-      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "image": "/images/anlac/tuong-quan-am/002.jpg",
       "slug": "tuong-quan-am",
       "createdAt": "2026-10-24T16:17:21Z",
-      "updatedAt": "2026-10-24T16:17:21Z"
+      "updatedAt": "2026-10-25T05:10:00Z"
     },
     {
       "id": 15,
@@ -146,12 +146,12 @@
     },
     {
       "id": 17,
-      "name": "Đồ đá khác",
-      "description": "Sản phẩm đá mỹ nghệ khác.",
-      "image": "/images/anlac/do-da-khac/001.jpg",
-      "slug": "do-da-khac",
+      "name": "Tượng Thánh",
+      "description": "Tượng Thánh đá.",
+      "image": "/images/anlac/tuong-thanh/001.jpg",
+      "slug": "tuong-thanh",
       "createdAt": "2026-10-24T16:17:21Z",
-      "updatedAt": "2026-10-24T16:17:21Z"
+      "updatedAt": "2026-10-25T05:10:00Z"
     },
     {
       "id": 18,
@@ -8551,42 +8551,42 @@
     },
     {
       "id": 238,
-      "name": "Tượng Quan Âm 01",
-      "description": "Tượng Quan Âm đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá.",
+      "name": "Tượng Thánh",
+      "description": "Tượng Thánh đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá.",
       "price": 0,
       "priceVND": 0,
       "netPrice": 0,
       "tax": 0,
-      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "image": "/images/anlac/tuong-thanh/001.jpg",
       "images": [
-        "/images/anlac/tuong-quan-am/001.jpg"
+        "/images/anlac/tuong-thanh/001.jpg"
       ],
-      "categoryId": 14,
+      "categoryId": 17,
       "stock": 1,
       "rating": 0,
       "reviewCount": 0,
       "isFeatured": false,
       "isActive": true,
-      "slug": "tuong-quan-am-001",
+      "slug": "tuong-thanh-001",
       "weight": null,
       "dimensions": null,
       "material": "Đá tự nhiên",
       "origin": "Việt Nam",
       "createdAt": "2026-10-24T16:17:21Z",
-      "updatedAt": "2026-10-24T16:17:21Z",
+      "updatedAt": "2026-10-25T05:10:00Z",
       "category": {
-        "id": 14,
-        "name": "Tượng Quan Âm",
-        "description": "Tượng Quan Âm đá.",
-        "image": "/images/anlac/tuong-quan-am/001.jpg",
-        "slug": "tuong-quan-am",
+        "id": 17,
+        "name": "Tượng Thánh",
+        "description": "Tượng Thánh đá.",
+        "image": "/images/anlac/tuong-thanh/001.jpg",
+        "slug": "tuong-thanh",
         "createdAt": "2026-10-24T16:17:21Z",
-        "updatedAt": "2026-10-24T16:17:21Z"
+        "updatedAt": "2026-10-25T05:10:00Z"
       }
     },
     {
       "id": 239,
-      "name": "Tượng Quan Âm 02",
+      "name": "Tượng Quan Âm",
       "description": "Tượng Quan Âm đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá.",
       "price": 0,
       "priceVND": 0,
@@ -8608,15 +8608,15 @@
       "material": "Đá tự nhiên",
       "origin": "Việt Nam",
       "createdAt": "2026-10-24T16:17:21Z",
-      "updatedAt": "2026-10-24T16:17:21Z",
+      "updatedAt": "2026-10-25T05:10:00Z",
       "category": {
         "id": 14,
         "name": "Tượng Quan Âm",
         "description": "Tượng Quan Âm đá.",
-        "image": "/images/anlac/tuong-quan-am/001.jpg",
+        "image": "/images/anlac/tuong-quan-am/002.jpg",
         "slug": "tuong-quan-am",
         "createdAt": "2026-10-24T16:17:21Z",
-        "updatedAt": "2026-10-24T16:17:21Z"
+        "updatedAt": "2026-10-25T05:10:00Z"
       }
     },
     {
@@ -8685,41 +8685,6 @@
         "description": "Tượng cá đá.",
         "image": "/images/anlac/tuong-ca/001.jpg",
         "slug": "tuong-ca",
-        "createdAt": "2026-10-24T16:17:21Z",
-        "updatedAt": "2026-10-24T16:17:21Z"
-      }
-    },
-    {
-      "id": 242,
-      "name": "Đồ đá khác",
-      "description": "Sản phẩm đá mỹ nghệ khác. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá.",
-      "price": 0,
-      "priceVND": 0,
-      "netPrice": 0,
-      "tax": 0,
-      "image": "/images/anlac/do-da-khac/001.jpg",
-      "images": [
-        "/images/anlac/do-da-khac/001.jpg"
-      ],
-      "categoryId": 17,
-      "stock": 1,
-      "rating": 0,
-      "reviewCount": 0,
-      "isFeatured": false,
-      "isActive": true,
-      "slug": "do-da-khac-001",
-      "weight": null,
-      "dimensions": null,
-      "material": "Đá tự nhiên",
-      "origin": "Việt Nam",
-      "createdAt": "2026-10-24T16:17:21Z",
-      "updatedAt": "2026-10-24T16:17:21Z",
-      "category": {
-        "id": 17,
-        "name": "Đồ đá khác",
-        "description": "Sản phẩm đá mỹ nghệ khác.",
-        "image": "/images/anlac/do-da-khac/001.jpg",
-        "slug": "do-da-khac",
         "createdAt": "2026-10-24T16:17:21Z",
         "updatedAt": "2026-10-24T16:17:21Z"
       }

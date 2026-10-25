@@ -939,6 +939,61 @@ body {
   padding: 3rem 0;
 }
 
+.footer-products {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 0.85rem;
+}
+
+.footer-products summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  color: #f4f8ff;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.footer-products summary::-webkit-details-marker {
+  display: none;
+}
+
+.footer-products summary::marker {
+  content: '';
+}
+
+.footer-products summary .fa-chevron-down {
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.footer-products[open] summary .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.footer-products ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 1.25rem;
+  max-height: 220px;
+  margin: 0.9rem 0 0;
+  overflow: auto;
+  padding-right: 0.35rem;
+}
+
+@media (max-width: 575.98px) {
+  .footer-products summary {
+    font-size: 1.6rem;
+  }
+
+  .footer-products ul {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .carousel-item {
@@ -2757,8 +2812,14 @@ h5.text-success {
 }
 
 .taste-welcome__img {
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+}
+
+.taste-welcome__img--fill {
+  object-fit: cover;
+  filter: blur(16px);
+  transform: scale(1.12);
 }
 
 .taste-welcome__scrim {
@@ -2801,7 +2862,14 @@ h5.text-success {
 }
 
 .taste-welcome__accent-img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.taste-welcome__accent-img--fill {
   object-fit: cover;
+  filter: blur(12px);
+  transform: scale(1.12);
 }
 
 .taste-welcome__dots {
@@ -2970,14 +3038,15 @@ h5.text-success {
 }
 
 .hero-carousel-react__img {
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.08);
-  transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1);
+  object-fit: contain;
+  object-position: right center;
 }
 
-.hero-carousel-react__slide.is-active .hero-carousel-react__img {
-  transform: scale(1);
+.hero-carousel-react__img--fill {
+  object-fit: cover;
+  object-position: center;
+  filter: blur(18px);
+  transform: scale(1.12);
 }
 
 .hero-carousel-react__veil {
@@ -3229,13 +3298,14 @@ h5.text-success {
 
 .taste-bento__card {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  min-height: 180px;
+  min-height: 340px;
   overflow: hidden;
   border-radius: var(--taste-radius);
   text-decoration: none;
-  background: var(--taste-mist);
+  background: #071833;
   border: 1px solid rgba(4, 20, 52, 0.12);
   box-shadow: 0 12px 28px rgba(4, 20, 52, 0.16);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
@@ -3255,29 +3325,20 @@ h5.text-success {
 }
 
 .taste-bento__media {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 230px;
 }
 
 .taste-bento__img {
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.taste-bento__card:hover .taste-bento__img {
-  transform: scale(1.04);
-}
-
-.taste-bento__scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(4, 20, 52, 0.05) 0%,
-    rgba(4, 20, 52, 0.35) 45%,
-    rgba(4, 20, 52, 0.82) 100%
-  );
+.taste-bento__img--fill {
+  object-fit: cover;
+  filter: blur(16px);
+  transform: scale(1.14);
 }
 
 .taste-bento__meta {
@@ -3287,9 +3348,9 @@ h5.text-success {
   flex-direction: column;
   justify-content: flex-end;
   gap: 0.55rem;
-  height: 100%;
-  min-height: inherit;
-  padding: 1rem 1.05rem 1.1rem;
+  flex: 0 0 auto;
+  padding: 0.85rem 1.05rem 1rem;
+  background: #071833;
 }
 
 .taste-bento__cell--hero .taste-bento__meta {
@@ -3350,12 +3411,12 @@ h5.text-success {
 
 .taste-featured-card--tile {
   grid-template-columns: 1fr;
-  grid-template-rows: 220px auto;
+  grid-template-rows: 300px auto;
   min-height: 0;
 }
 
 .taste-featured-card--tile .taste-featured-card__media {
-  min-height: 220px;
+  min-height: 300px;
 }
 
 .taste-featured-card {
@@ -3387,12 +3448,14 @@ h5.text-success {
 }
 
 .taste-featured-card__img {
-  object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  object-fit: contain;
+  object-position: center;
 }
 
-.taste-featured-card:hover .taste-featured-card__img {
-  transform: scale(1.03);
+.taste-featured-card__img--fill {
+  object-fit: cover;
+  filter: blur(16px);
+  transform: scale(1.14);
 }
 
 .taste-featured-card__body {
@@ -3528,7 +3591,7 @@ h5.text-success {
 
   .taste-featured-card--large {
     min-height: 0;
-    grid-template-rows: 240px auto;
+    grid-template-rows: 360px auto;
   }
 
   .taste-bento {
@@ -3541,7 +3604,11 @@ h5.text-success {
   }
 
   .taste-bento__cell--hero .taste-bento__card {
-    min-height: 240px;
+    min-height: 420px;
+  }
+
+  .hero-carousel-react__img {
+    object-position: center 18%;
   }
 }
 
@@ -3601,7 +3668,11 @@ h5.text-success {
   }
 
   .taste-bento__card {
-    min-height: 210px;
+    min-height: 420px;
+  }
+
+  .taste-bento__media {
+    min-height: 300px;
   }
 } 
 /* ========== Taste Skill contact refresh ========== */

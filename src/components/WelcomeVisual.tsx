@@ -82,6 +82,14 @@ export default function WelcomeVisual() {
             >
               <Image
                 src={slide.main}
+                alt=""
+                fill
+                sizes="(max-width: 767px) 100vw, 42vw"
+                className="taste-welcome__img taste-welcome__img--fill"
+                aria-hidden
+              />
+              <Image
+                src={slide.main}
                 alt={slide.alt}
                 fill
                 priority={i < 2}
@@ -103,6 +111,14 @@ export default function WelcomeVisual() {
               className={`taste-welcome__accent-slide${active ? ' is-active' : ''}`}
               style={{ opacity: active ? 1 : 0 }}
             >
+              <Image
+                src={slide.accent}
+                alt=""
+                fill
+                sizes="(max-width: 767px) 40vw, 18vw"
+                className="taste-welcome__accent-img taste-welcome__accent-img--fill"
+                aria-hidden
+              />
               <Image
                 src={slide.accent}
                 alt=""
