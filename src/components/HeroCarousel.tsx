@@ -6,27 +6,27 @@ import Image from 'next/image'
 const carouselData = [
   {
     id: 1,
-    image: '/images/clean/hero/slide-1.jpg',
-    title: 'An Lạc Stone',
-    subtitle: 'Đá Cảnh & Mỹ Nghệ Chất Lượng Cao',
+    image: '/images/anlac/dai-phun-nuoc/001.jpg',
+    title: 'Đài phun nước',
+    subtitle: 'Điểm nhấn đá cho sân vườn',
     description:
-      'Chuyên cung cấp đá cảnh, đồ chế tác từ đá mỹ nghệ chất lượng cao. Từ đá phong thủy đến tượng đá nghệ thuật, chúng tôi mang đến những sản phẩm độc đáo và tinh tế.',
+      'Đài phun nước đá nhiều tầng, bố cục rõ và đặt trọn giữa không gian ngoài trời.',
   },
   {
     id: 2,
-    image: '/images/clean/hero/slide-2.jpg',
-    title: 'Đá Tự Nhiên',
-    subtitle: 'Từng Mảnh Ký Ức Của Thiên Nhiên',
+    image: '/images/anlac/tuong-phat-thich-ca/012.jpg',
+    title: 'Tượng Phật',
+    subtitle: 'Điêu khắc đá đường nét rõ',
     description:
-      'Mỗi đường vân, mỗi sắc màu đều là dấu ấn thời gian không thể lặp lại. Đá thiên nhiên kể câu chuyện về sự trường tồn và kết nối với đất mẹ.',
+      'Tượng Phật đá được đặt nổi bật, ánh sáng tự nhiên và phông xanh giúp hình tượng dễ nhìn.',
   },
   {
     id: 3,
-    image: '/images/clean/hero/slide-3.jpg',
-    title: 'Sản Phẩm Mỹ Nghệ',
-    subtitle: 'Nghệ Thuật Từ Đá Tự Nhiên',
+    image: '/images/anlac/phu-dieu/001.jpg',
+    title: 'Phù điêu',
+    subtitle: 'Hoa sen trong một khung tròn',
     description:
-      'Từ tượng đá, đài phun nước đến đèn đá và lavabo. Mỗi tác phẩm là sự kết hợp giữa bàn tay nghệ nhân và vẻ đẹp nguyên bản của thiên nhiên.',
+      'Phù điêu đá hoa sen, bố cục khép kín, dễ nhìn từ xa.',
   },
 ]
 

@@ -3341,6 +3341,23 @@ h5.text-success {
   gap: 1rem;
 }
 
+.taste-featured-more {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.taste-featured-card--tile {
+  grid-template-columns: 1fr;
+  grid-template-rows: 220px auto;
+  min-height: 0;
+}
+
+.taste-featured-card--tile .taste-featured-card__media {
+  min-height: 220px;
+}
+
 .taste-featured-card {
   display: grid;
   overflow: hidden;
@@ -3505,6 +3522,10 @@ h5.text-success {
     grid-template-columns: 1fr;
   }
 
+  .taste-featured-more {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .taste-featured-card--large {
     min-height: 0;
     grid-template-rows: 240px auto;
@@ -3567,6 +3588,10 @@ h5.text-success {
 }
 
 @media (max-width: 575.98px) {
+  .taste-featured-more {
+    grid-template-columns: 1fr;
+  }
+
   .taste-bento {
     grid-template-columns: 1fr;
   }

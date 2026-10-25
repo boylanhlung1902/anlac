@@ -75,6 +75,7 @@ export default function Home() {
 
   const craftCategories = highlights.categories
   const featuredProducts = highlights.featured
+  const featuredMore = featuredProducts.slice(3)
 
   const stats = [
     { value: '500+', label: 'Sản phẩm đá quý', icon: 'fa-gem' },
@@ -88,7 +89,7 @@ export default function Home() {
       <Header />
 
       {/* Welcome - asymmetric split */}
-      <HomeSection image="/images/clean/sections/welcome.jpg" className="home-welcome" tone="dark">
+      <HomeSection image="/images/anlac/dai-phun-nuoc/001.jpg" className="home-welcome" tone="dark">
         <div className="container">
           <div className="taste-welcome-grid">
             <Reveal className="taste-welcome">
@@ -121,13 +122,13 @@ export default function Home() {
       </div>
 
       {/* Categories - bento rhythm */}
-      <HomeSection image="/images/clean/sections/categories.jpg" tone="soft">
+      <HomeSection image="/images/anlac/tuong-ky-lan/001.jpg" tone="soft">
         <div className="container">
           <Reveal>
             <div className="taste-section-head">
               <h2 className="taste-section-title home-section__heading">Danh mục nổi bật</h2>
               <p className="taste-section-lead home-section__lead">
-                Bàn ghế, đài phun nước, đèn đá, lavabo, tượng và thạch mỹ nghệ.
+                Đủ các danh mục đá cảnh và mỹ nghệ. Ảnh bìa dùng tấm rõ sản phẩm nhất trong từng danh mục.
               </p>
             </div>
           </Reveal>
@@ -161,7 +162,7 @@ export default function Home() {
       </HomeSection>
 
       {/* Featured - 1 featured + 2 stacked (not three equal cards) */}
-      <HomeSection image="/images/clean/sections/featured.jpg" tone="dark">
+      <HomeSection image="/images/anlac/tuong-phat-thich-ca/012.jpg" tone="dark">
         <div className="container">
           <Reveal>
             <div className="taste-section-head taste-section-head--row">
@@ -216,7 +217,7 @@ export default function Home() {
             </Reveal>
 
             <div className="taste-featured__stack">
-              {featuredProducts.slice(1).map((product, index) => (
+              {featuredProducts.slice(1, 3).map((product, index) => (
                 <Reveal key={product.id} delayMs={(index + 1) * 80}>
                   <article className="taste-featured-card taste-featured-card--compact">
                     <Link href={`/shop-single/${product.id}`} className="taste-featured-card__media">
@@ -259,11 +260,57 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {featuredMore.length > 0 && (
+            <div className="taste-featured-more">
+              {featuredMore.map((product, index) => (
+                <Reveal key={product.id} delayMs={(index % 3) * 60}>
+                  <article className="taste-featured-card taste-featured-card--tile">
+                    <Link href={`/shop-single/${product.id}`} className="taste-featured-card__media">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 575px) 100vw, (max-width: 991px) 50vw, 33vw"
+                        className="taste-featured-card__img"
+                      />
+                    </Link>
+                    <div className="taste-featured-card__body">
+                      <h3 className="taste-featured-card__title">
+                        <Link href={`/shop-single/${product.id}`}>{product.name}</Link>
+                      </h3>
+                      <p className="taste-featured-card__price">{product.price}</p>
+                      <div className="taste-featured-card__actions">
+                        <button
+                          type="button"
+                          className={`btn btn-success btn-sm taste-btn ${addedItems.has(product.id) ? 'is-added' : ''}`}
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          {addedItems.has(product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
+                        </button>
+                        <button
+                          type="button"
+                          className={`btn taste-wish ${isInWishlist(product.id) ? 'is-active' : ''}`}
+                          onClick={() => {
+                            if (isInWishlist(product.id)) removeFromWishlist(product.id)
+                            else addToWishlist(product)
+                          }}
+                          aria-label={isInWishlist(product.id) ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'}
+                        >
+                          <i className="fas fa-heart" />
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </HomeSection>
 
       {/* Stats - strip, no infinite icon loops */}
-      <HomeSection image="/images/clean/sections/stats.jpg" tone="soft">
+      <HomeSection image="/images/anlac/phu-dieu/001.jpg" tone="soft">
         <div className="container">
           <Reveal>
             <div className="taste-stats">
