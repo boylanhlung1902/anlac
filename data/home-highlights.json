@@ -125,6 +125,76 @@
       "image": "/images/anlac/anh-tong-hop/001.jpg",
       "icon": "fa-images",
       "count": 2
+    },
+    {
+      "name": "Tượng Đá Nghệ Thuật",
+      "slug": "tuong-da-nghe-thuat",
+      "image": "/images/san-pham-my-nghe/tuong-da/anh1.webp",
+      "icon": "fa-place-of-worship",
+      "count": 6
+    },
+    {
+      "name": "Bàn Đá Trang Trí",
+      "slug": "ban-da-trang-tri",
+      "image": "/images/san-pham-my-nghe/ban-ghe-da/anh1.webp",
+      "icon": "fa-table",
+      "count": 2
+    },
+    {
+      "name": "Bàn Ghế Đá",
+      "slug": "ban-ghe-da",
+      "image": "/images/san-pham-my-nghe/ban-ghe-da/anh1.webp",
+      "icon": "fa-chair",
+      "count": 2
+    },
+    {
+      "name": "Đài Phun Nước",
+      "slug": "dai-phun-nuoc-truoc",
+      "image": "/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp",
+      "icon": "fa-water",
+      "count": 2
+    },
+    {
+      "name": "Bảng Hiệu Đá",
+      "slug": "bang-hieu-da",
+      "image": "/images/san-pham-my-nghe/bang-hieu-da/anh1.jpg",
+      "icon": "fa-sign",
+      "count": 2
+    },
+    {
+      "name": "Bồn Tắm Đá",
+      "slug": "bon-tam-da",
+      "image": "/images/san-pham-my-nghe/bon-tam-da/anh1.webp",
+      "icon": "fa-bath",
+      "count": 2
+    },
+    {
+      "name": "Đèn Đá",
+      "slug": "den-da-truoc",
+      "image": "/images/san-pham-my-nghe/den-da/anh1.webp",
+      "icon": "fa-lightbulb",
+      "count": 2
+    },
+    {
+      "name": "Lavabo Đá",
+      "slug": "lavabo-da",
+      "image": "/images/san-pham-my-nghe/lavabo-da/anh1.webp",
+      "icon": "fa-sink",
+      "count": 2
+    },
+    {
+      "name": "Tượng Đá",
+      "slug": "tuong-da",
+      "image": "/images/san-pham-my-nghe/tuong-da/anh1.webp",
+      "icon": "fa-user",
+      "count": 2
+    },
+    {
+      "name": "Thạch Mỹ Nghệ",
+      "slug": "thach-my-nghe",
+      "image": "/images/san-pham-my-nghe/thach-my-nghe/anh7.webp",
+      "icon": "fa-gem",
+      "count": 2
     }
   ],
   "featured": [
