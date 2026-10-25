@@ -130,31 +130,6 @@ export const productAPI = {
     }
     return products.products[0]
   },
-
-  // Create new product
-  createProduct: async (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'category'> & { categoryId: number }): Promise<Product> => {
-    const response = await apiCall<ApiResponse<Product>>('/products', {
-      method: 'POST',
-      body: JSON.stringify(productData),
-    })
-    return response.data
-  },
-
-  // Update product
-  updateProduct: async (id: number, productData: Partial<Product>): Promise<Product> => {
-    const response = await apiCall<ApiResponse<Product>>(`/products/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(productData),
-    })
-    return response.data
-  },
-
-  // Delete product
-  deleteProduct: async (id: number): Promise<void> => {
-    await apiCall(`/products/${id}`, {
-      method: 'DELETE',
-    })
-  },
 }
 
 // Category API functions
@@ -187,15 +162,6 @@ export const categoryAPI = {
       throw new Error('Category not found')
     }
     return category
-  },
-
-  // Create new category
-  createCategory: async (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt' | 'products'>): Promise<Category> => {
-    const response = await apiCall<ApiResponse<Category>>('/categories', {
-      method: 'POST',
-      body: JSON.stringify(categoryData),
-    })
-    return response.data
   },
 }
 

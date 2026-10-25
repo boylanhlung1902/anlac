@@ -4,7 +4,6 @@ import './globals.css'
 import BootstrapScript from '@/components/BootstrapScript'
 import { CartProvider } from '@/contexts/CartContext'
 import { WishlistProvider } from '@/contexts/WishlistContext'
-import PayPalProvider from '@/providers/PayPalProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,14 +32,12 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Questrial&family=Roboto:wght@100;200;300;400;500;700;900&display=swap" />
       </head>
       <body className={inter.className}>
-        <PayPalProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <BootstrapScript />
-              {children}
-            </WishlistProvider>
-          </CartProvider>
-        </PayPalProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <BootstrapScript />
+            {children}
+          </WishlistProvider>
+        </CartProvider>
       </body>
     </html>
   )

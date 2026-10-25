@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '../../../../lib/database'
 import { queryCatalogProducts, readFromDatabase } from '../../../../lib/catalog'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '12')
-    const category = searchParams.get('category')
-    const search = searchParams.get('search')
+    const page = Math.min(500, Math.max(1, Number.parseInt(searchParams.get('page') || '1', 10) || 1))
+    const limit = Math.min(48, Math.max(1, Number.parseInt(searchParams.get('limit') || '12', 10) || 12))
+    const category = searchParams.get('category')?.slice(0, 80) || null
+    const search = searchParams.get('search')?.slice(0, 80) || null
     const featured = searchParams.get('featured') === 'true'
     const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
+    const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc'
 
     const skip = (page - 1) * limit
 
@@ -131,96 +130,7 @@ export async function GET(request: NextRequest) {
       { 
         success: false,
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    )
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const {
-      name,
-      description,
-      price,
-      priceVND,
-      netPrice,
-      image,
-      images,
-      categoryId,
-      stock,
-      slug,
-      weight,
-      dimensions,
-      material,
-      origin,
-      isFeatured = false
-    } = body
-
-    // Validate required fields
-    if (!name || !description || !price || !priceVND || !image || !categoryId || !slug) {
-      return NextResponse.json(
-        { 
-          success: false,
-          error: 'Missing required fields',
-          message: 'Name, description, price, priceVND, image, categoryId, and slug are required'
-        },
-        { status: 400 }
-      )
-    }
-
-    const product = await prisma.product.create({
-      data: {
-        name,
-        description,
-        price: parseFloat(price),
-        priceVND: parseInt(priceVND),
-        netPrice: netPrice != null && netPrice !== ''
-          ? parseFloat(netPrice)
-          : Math.round((parseFloat(price) / 1.1) * 100) / 100,
-        image,
-        images: images || [],
-        categoryId: parseInt(categoryId),
-        stock: parseInt(stock) || 0,
-        slug,
-        weight: weight ? parseFloat(weight) : null,
-        dimensions,
-        material,
-        origin,
-        isFeatured
-      },
-      include: {
-        category: true
-      }
-    })
-
-    return NextResponse.json({
-      success: true,
-      data: product,
-      message: 'Product created successfully'
-    }, { status: 201 })
-  } catch (error) {
-    console.error('Error creating product:', error)
-    
-    // Handle unique constraint violation
-    if (error instanceof Error && error.message.includes('Unique constraint')) {
-      return NextResponse.json(
-        { 
-          success: false,
-          error: 'Duplicate entry',
-          message: 'Product with this slug already exists'
-        },
-        { status: 409 }
-      )
-    }
-
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: 'Không thể tải danh sách sản phẩm.'
       },
       { status: 500 }
     )

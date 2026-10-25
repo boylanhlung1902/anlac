@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
-import PayPalButton from './PayPalButton'
-import PayPalFallback from './PayPalFallback'
+import { QUOTE_PRICE_LABEL, formatPriceVND } from '@/services/api'
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -12,223 +11,126 @@ interface CheckoutModalProps {
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const { cartItems, getTotalPrice, clearCart } = useCart()
-  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'error' | null>(null)
-  const [paymentDetails, setPaymentDetails] = useState<any>(null)
-  const [useFallback, setUseFallback] = useState(false)
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [note, setNote] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
 
   const totalPrice = getTotalPrice()
-  const totalPriceUSD = Math.round(totalPrice / 24000) // Convert VND to USD (approximate)
+  const hasUnpricedItem = cartItems.some((item) => !item.price.replace(/[^\d]/g, ''))
 
-  const handlePaymentSuccess = (details: any) => {
-    setPaymentStatus('success')
-    setPaymentDetails(details)
-    clearCart()
-    
-    // Auto close after 3 seconds
-    setTimeout(() => {
-      onClose()
-      setPaymentStatus(null)
-      setPaymentDetails(null)
-    }, 3000)
-  }
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    if (cartItems.length === 0 || status === 'sending') return
+    setStatus('sending')
+    setMessage('')
 
-  const handlePaymentError = (error: any) => {
-    setPaymentStatus('error')
-    console.error('Payment error:', error)
-  }
-
-  const handlePaymentCancel = () => {
-    setPaymentStatus('pending')
-  }
-
-  const handleFallbackToggle = () => {
-    setUseFallback(!useFallback)
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          phone,
+          email,
+          note,
+          items: cartItems.map((item) => ({ id: item.id, quantity: item.quantity })),
+        }),
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok || !data?.success) {
+        setStatus('error')
+        setMessage(data?.message || 'Không gửi được đơn hàng. Vui lòng thử lại.')
+        return
+      }
+      clearCart()
+      setStatus('success')
+      setMessage(data.message)
+    } catch {
+      setStatus('error')
+      setMessage('Không gửi được đơn hàng. Vui lòng thử lại.')
+    }
   }
 
   if (!isOpen) return null
 
   return (
     <>
-      {/* Backdrop */}
-      <div 
+      <div
         className="position-fixed top-0 start-0 w-100 h-100 bg-dark"
-        style={{ 
-          opacity: 0.5, 
-          zIndex: 1040 
-        }}
+        style={{ opacity: 0.5, zIndex: 1060 }}
         onClick={onClose}
-      ></div>
-
-      {/* Modal */}
-      <div 
+      />
+      <div
         className="position-fixed top-50 start-50 translate-middle bg-white rounded-3 shadow-lg"
-        style={{ 
-          width: '90%',
-          maxWidth: '600px',
-          zIndex: 1050,
-          maxHeight: '90vh',
-          overflowY: 'auto'
-        }}
+        style={{ width: '90%', maxWidth: '640px', zIndex: 1070, maxHeight: '90vh', overflowY: 'auto' }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="order-dialog-title"
       >
-        {/* Header */}
         <div className="d-flex justify-content-between align-items-center p-4 border-bottom">
-          <h4 className="mb-0">
-            <i className="fas fa-credit-card me-2 text-success"></i>
-            Thanh Toán
-          </h4>
-          <button 
-            type="button" 
-            className="btn-close" 
-            onClick={onClose}
-            aria-label="Close"
-          ></button>
+          <h4 className="mb-0" id="order-dialog-title">Gửi đơn hàng</h4>
+          <button type="button" className="btn-close" onClick={onClose} aria-label="Đóng" />
         </div>
 
-        {/* Content */}
         <div className="p-4">
-          {paymentStatus === 'success' ? (
+          {status === 'success' ? (
             <div className="text-center">
-              <div className="mb-4">
-                <i className="fas fa-check-circle text-success" style={{ fontSize: '4rem' }}></i>
-              </div>
-              <h4 className="text-success mb-3">Thanh Toán Thành Công!</h4>
-              <p className="text-muted mb-3">
-                Cảm ơn bạn đã mua sắm tại An Lạc Stone. Đơn hàng của bạn đã được xác nhận.
-              </p>
-              {paymentDetails && (
-                <div className="bg-light p-3 rounded mb-3">
-                  <small className="text-muted">
-                    <strong>Mã giao dịch:</strong> {paymentDetails.id}
-                  </small>
-                </div>
-              )}
-              <button className="btn btn-success" onClick={onClose}>
-                Hoàn Tất
-              </button>
-            </div>
-          ) : paymentStatus === 'error' ? (
-            <div className="text-center">
-              <div className="mb-4">
-                <i className="fas fa-exclamation-circle text-danger" style={{ fontSize: '4rem' }}></i>
-              </div>
-              <h4 className="text-danger mb-3">Thanh Toán Thất Bại</h4>
-              <p className="text-muted mb-3">
-                Có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại.
-              </p>
-              <button 
-                className="btn btn-outline-secondary me-2" 
-                onClick={() => setPaymentStatus(null)}
-              >
-                Thử Lại
-              </button>
-              <button className="btn btn-secondary" onClick={onClose}>
-                Đóng
-              </button>
+              <i className="fas fa-check-circle text-success" style={{ fontSize: '3rem' }} />
+              <h4 className="mt-3">Đã gửi đơn hàng</h4>
+              <p className="text-muted">{message}</p>
+              <button type="button" className="btn btn-success" onClick={onClose}>Đóng</button>
             </div>
           ) : (
-            <>
-              {/* Order Summary */}
-              <div className="mb-4">
-                <h5 className="mb-3">Tóm Tắt Đơn Hàng</h5>
-                <div className="bg-light p-3 rounded">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="d-flex justify-content-between align-items-center mb-2">
-                      <div>
-                        <strong>{item.name}</strong>
-                        <br />
-                        <small className="text-muted">Số lượng: {item.quantity}</small>
-                      </div>
-                      <span className="text-success">{item.price}</span>
+            <form onSubmit={handleSubmit}>
+              <div className="bg-light p-3 rounded mb-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="d-flex justify-content-between gap-3 mb-2">
+                    <div>
+                      <strong>{item.name}</strong>
+                      <div className="small text-muted">Số lượng: {item.quantity}</div>
                     </div>
-                  ))}
-                  <hr />
-                  <div className="d-flex justify-content-between align-items-center">
-                    <strong>Tổng cộng:</strong>
-                    <strong className="text-success">{totalPrice.toLocaleString('vi-VN')} VNĐ</strong>
+                    <span>{item.price}</span>
                   </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <small className="text-muted">Tương đương:</small>
-                    <small className="text-muted">~${totalPriceUSD} USD</small>
-                  </div>
+                ))}
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <strong>Tổng đã niêm yết</strong>
+                  <strong>{totalPrice > 0 ? formatPriceVND(totalPrice) : QUOTE_PRICE_LABEL}</strong>
                 </div>
+                {hasUnpricedItem && (
+                  <p className="small text-muted mb-0 mt-2">Sản phẩm chưa có giá sẽ được báo khi xác nhận đơn.</p>
+                )}
               </div>
 
-              {/* Development Mode Toggle */}
-              <div className="mb-4">
-                <div className="form-check form-switch">
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" 
-                    id="fallbackToggle"
-                    checked={useFallback}
-                    onChange={handleFallbackToggle}
-                  />
-                  <label className="form-check-label" htmlFor="fallbackToggle">
-                    <i className="fas fa-code me-2"></i>
-                    Chế độ Development (Mô phỏng thanh toán)
-                  </label>
-                </div>
-                <small className="text-muted">
-                  Bật chế độ này để test thanh toán mà không cần PayPal thực.
-                </small>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="order-name">Họ và tên</label>
+                <input id="order-name" className="form-control" value={name} onChange={(event) => setName(event.target.value)} required maxLength={80} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="order-phone">Số điện thoại</label>
+                <input id="order-phone" className="form-control" value={phone} onChange={(event) => setPhone(event.target.value)} required maxLength={20} inputMode="tel" />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="order-email">Email</label>
+                <input id="order-email" type="email" className="form-control" value={email} onChange={(event) => setEmail(event.target.value)} required maxLength={120} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="order-note">Ghi chú</label>
+                <textarea id="order-note" className="form-control" rows={3} value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} />
               </div>
 
-              {/* Payment Methods */}
-              <div className="mb-4">
-                <h5 className="mb-3">Phương Thức Thanh Toán</h5>
-                <div className="border rounded p-3">
-                  {useFallback ? (
-                    <PayPalFallback
-                      amount={totalPriceUSD}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                      onCancel={handlePaymentCancel}
-                    />
-                  ) : (
-                    <>
-                      <div className="d-flex align-items-center mb-3">
-                        <img 
-                          src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" 
-                          alt="PayPal" 
-                          className="me-3"
-                          style={{ height: '23px' }}
-                        />
-                        <span className="fw-bold">PayPal</span>
-                      </div>
-                      <p className="text-muted small mb-3">
-                        Thanh toán an toàn và nhanh chóng với PayPal. Bạn có thể sử dụng thẻ tín dụng, 
-                        thẻ ghi nợ hoặc tài khoản PayPal của mình.
-                      </p>
-                      
-                      <PayPalButton
-                        amount={totalPriceUSD}
-                        onSuccess={handlePaymentSuccess}
-                        onError={handlePaymentError}
-                        onCancel={handlePaymentCancel}
-                        disabled={cartItems.length === 0}
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
+              {status === 'error' && <p className="text-danger">{message}</p>}
 
-              {/* Additional Info */}
-              <div className="bg-light p-3 rounded">
-                <h6 className="mb-2">
-                  <i className="fas fa-info-circle text-info me-2"></i>
-                  Thông Tin Bổ Sung
-                </h6>
-                <ul className="list-unstyled small text-muted mb-0">
-                  <li>• Thanh toán được xử lý an toàn bởi PayPal</li>
-                  <li>• Không lưu trữ thông tin thẻ tín dụng</li>
-                  <li>• Hỗ trợ nhiều loại tiền tệ</li>
-                  <li>• Giao hàng miễn phí cho đơn hàng trên 500,000 VNĐ</li>
-                </ul>
-              </div>
-            </>
+              <button type="submit" className="btn btn-success w-100" disabled={status === 'sending' || cartItems.length === 0}>
+                {status === 'sending' ? 'Đang gửi...' : 'Gửi nội dung đơn hàng'}
+              </button>
+            </form>
           )}
         </div>
       </div>
     </>
   )
-} 
+}

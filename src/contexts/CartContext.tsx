@@ -65,14 +65,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const updateQuantity = (id: number, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(id)
-      return
-    }
-    
+    const safeQuantity = Math.min(99, Math.max(1, Math.floor(quantity) || 1))
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item.id === id ? { ...item, quantity } : item
+        item.id === id ? { ...item, quantity: safeQuantity } : item
       )
     )
   }
