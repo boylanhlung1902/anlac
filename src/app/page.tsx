@@ -52,7 +52,7 @@ export default function Home() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contact),
+        body: JSON.stringify({ ...contact, source: 'homepage' }),
       })
 
       const data = await response.json()

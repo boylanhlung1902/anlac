@@ -29,7 +29,9 @@ export async function GET(
     )
     const product = loaded.ok ? loaded.value : findCatalogProduct(id)
 
-    if (!product || product.isActive === false) {
+    const category = product?.category
+    const categoryHidden = Boolean(category && 'isActive' in category && category.isActive === false)
+    if (!product || product.isActive === false || categoryHidden) {
       return NextResponse.json(
         { 
           success: false,

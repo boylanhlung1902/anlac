@@ -5,6 +5,8 @@ import Footer from '@/components/Footer'
 import Reveal from '@/components/Reveal'
 import Link from 'next/link'
 import { useState } from 'react'
+import { phoneHref } from '@/lib/store-defaults'
+import { useStoreInfo } from '@/lib/use-store'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const store = useStoreInfo()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -44,6 +47,7 @@ export default function Contact() {
           phone: formData.phone,
           subject: formData.subject,
           message: formData.message,
+          source: 'contact',
         }),
       })
 
@@ -76,22 +80,14 @@ export default function Contact() {
     {
       icon: 'fa-map-marker-alt',
       title: 'Địa chỉ',
-      body: (
-        <>
-          123 Đường Nguyễn Huệ
-          <br />
-          Quận 1, TP. Hồ Chí Minh
-          <br />
-          Việt Nam
-        </>
-      ),
+      body: <span style={{ whiteSpace: 'pre-line' }}>{store.address}</span>,
     },
     {
       icon: 'fa-phone',
       title: 'Điện thoại',
       body: (
-        <a href="tel:0877705979" className="contact-taste__link">
-          087-770-5979
+        <a href={phoneHref(store.phone)} className="contact-taste__link">
+          {store.phone}
         </a>
       ),
     },
@@ -99,8 +95,8 @@ export default function Contact() {
       icon: 'fa-envelope',
       title: 'Email',
       body: (
-        <a href="mailto:hoangminhtrung1902@gmail.com" className="contact-taste__link">
-          hoangminhtrung1902@gmail.com
+        <a href={`mailto:${store.email}`} className="contact-taste__link">
+          {store.email}
         </a>
       ),
     },
@@ -109,11 +105,11 @@ export default function Contact() {
       title: 'Giờ làm việc',
       body: (
         <>
-          Thứ 2 - Thứ 6: 8:00 - 18:00
+          {store.hoursWeekday}
           <br />
-          Thứ 7: 8:00 - 16:00
+          {store.hoursSaturday}
           <br />
-          Chủ Nhật: 9:00 - 15:00
+          {store.hoursSunday}
         </>
       ),
     },

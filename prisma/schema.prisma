@@ -14,6 +14,7 @@ model Category {
   description String?
   image       String?
   slug        String    @unique
+  isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
@@ -52,19 +53,21 @@ model Product {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  name      String?
-  phone     String?
-  address   String?
-  role      UserRole   @default(CUSTOMER)
-  isActive  Boolean    @default(true)
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  username     String?    @unique
+  passwordHash String?
+  name         String?
+  phone        String?
+  address      String?
+  role         UserRole   @default(CUSTOMER)
+  isActive     Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   cartItems CartItem[]
   orders    Order[]
 
-  @@map("users")
+  @@map("shop_users")
 }
 
 model Order {
@@ -143,4 +146,37 @@ enum PaymentMethod {
   PAYPAL
   CASH
   BANK_TRANSFER
+}
+
+model CustomerSubmission {
+  id        Int      @id @default(autoincrement())
+  kind      String
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String?
+  items     Json?
+  totalVND  Int      @default(0)
+  status    String   @default("NEW")
+  source    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([kind, createdAt])
+  @@map("customer_submissions")
+}
+
+model StoreSetting {
+  id            Int      @id
+  storeName     String
+  phone         String
+  email         String
+  address       String
+  hoursWeekday  String
+  hoursSaturday String
+  hoursSunday   String
+  updatedAt     DateTime @updatedAt
+
+  @@map("store_settings")
 }

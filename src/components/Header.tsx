@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { useWishlist } from '@/contexts/WishlistContext'
+import { phoneHref } from '@/lib/store-defaults'
+import { useStoreInfo } from '@/lib/use-store'
 import CartPopup from './CartPopup'
 
 export default function Header() {
@@ -12,6 +14,7 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const { cartItems, getTotalItems, updateQuantity, removeFromCart } = useCart()
   const { getWishlistCount } = useWishlist()
+  const store = useStoreInfo()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -29,9 +32,9 @@ export default function Header() {
           <div className="w-100 d-flex justify-content-between">
             <div>
               <i className="fa fa-envelope mx-2"></i>
-              <a className="navbar-sm-brand text-light text-decoration-none" href="mailto:hoangminhtrung1902@gmail.com">hoangminhtrung1902@gmail.com</a>
+              <a className="navbar-sm-brand text-light text-decoration-none" href={`mailto:${store.email}`}>{store.email}</a>
               <i className="fa fa-phone mx-2"></i>
-              <a className="navbar-sm-brand text-light text-decoration-none" href="tel:087-770-5979">087-770-5979</a>
+              <a className="navbar-sm-brand text-light text-decoration-none" href={phoneHref(store.phone)}>{store.phone}</a>
             </div>
             <div>
               <a className="text-light" href="https://fb.com/stoneart" target="_blank" rel="sponsored"><i className="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
@@ -47,7 +50,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light shadow site-header">
         <div className="container d-flex justify-content-between align-items-center">
           <Link className="navbar-brand text-success logo h1 align-self-center" href="/">
-            An Lạc Stone
+            {store.storeName}
           </Link>
 
           <button 

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     const loaded = await readFromDatabase((db) =>
       db.category.findMany({
-        where: { products: { some: { isActive: true } } },
+        where: { isActive: true, products: { some: { isActive: true, category: { isActive: true } } } },
         include: includeProducts ? {
           products: {
             where: { isActive: true },

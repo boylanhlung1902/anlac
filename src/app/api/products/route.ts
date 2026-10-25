@@ -16,12 +16,14 @@ export async function GET(request: NextRequest) {
 
     // Build where clause
     const where: any = {
-      isActive: true
+      isActive: true,
+      category: { isActive: true },
     }
 
     if (category) {
       where.category = {
-        slug: category
+        slug: category,
+        isActive: true,
       }
     }
 

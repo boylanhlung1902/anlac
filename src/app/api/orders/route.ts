@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { findCatalogProduct, readFromDatabase } from '../../../../lib/catalog'
-import { clientKey, escapeHtml, readGmailAuth, sendGmail, singleLine, mailFailureStatus } from '../../../../lib/mail'
+import { clientKey, escapeHtml, readGmailAuth, sendGmail, singleLine } from '../../../../lib/mail'
+import { saveSubmission } from '@/lib/submissions'
+import { getStoreSettings } from '@/lib/store-settings'
 import { rateLimit } from '../../../../lib/rate-limit'
 import { formatPriceVND } from '../../../../src/services/api'
 
@@ -8,6 +10,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_PATTERN = /^[0-9+\s().-]{8,20}$/
 
 type OrderLine = {
+  id: number
   name: string
   quantity: number
   unit: number
@@ -68,6 +71,7 @@ export async function POST(request: NextRequest) {
         )
       }
       lines.push({
+        id,
         name: product.name,
         quantity,
         unit: product.priceVND > 0 ? product.priceVND : 0,
@@ -87,16 +91,34 @@ export async function POST(request: NextRequest) {
       </tr>`
     }).join('')
 
-    const { user, pass } = readGmailAuth()
-    if (!user || pass.length !== 16) {
+    const saved = await saveSubmission({
+      kind: 'ORDER',
+      name,
+      email,
+      phone,
+      message: note || null,
+      totalVND: priced,
+      source: 'cart',
+      items: lines.map((line) => ({
+        productId: line.id,
+        name: line.name,
+        quantity: line.quantity,
+        priceVND: line.unit,
+      })),
+    })
+    if (!saved) {
       return NextResponse.json(
-        { success: false, message: 'Hệ thống gửi mail chưa sẵn sàng. Vui lòng gọi hotline.' },
+        { success: false, message: 'Chưa lưu được đơn hàng. Vui lòng gọi hotline.' },
         { status: 503 }
       )
     }
 
+    const settings = await getStoreSettings()
+    const { user, pass } = readGmailAuth()
+    if (user && pass.length === 16) {
+    try {
     await sendGmail({
-      to: 'hoangminhtrung1902@gmail.com',
+      to: settings.email,
       replyTo: email,
       subject: `Đơn hàng mới từ ${name}`,
       html: `
@@ -125,22 +147,20 @@ export async function POST(request: NextRequest) {
         </div>
       `,
     })
+    } catch (error) {
+      console.error('Order mail failed after save', error instanceof Error ? error.name : 'error')
+    }
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Đơn hàng đã được gửi. An Lạc Stone sẽ liên hệ để xác nhận.',
+      message: 'Đơn hàng đã được ghi nhận. An Lạc Stone sẽ liên hệ để xác nhận.',
     })
   } catch (error) {
-    console.error('Error sending order email')
-    const status = mailFailureStatus(error)
+    console.error('Error saving order', error instanceof Error ? error.name : 'error')
     return NextResponse.json(
-      {
-        success: false,
-        message: status === 502
-          ? 'Máy chủ mail từ chối gửi. Vui lòng gọi hotline.'
-          : 'Không gửi được đơn hàng. Vui lòng thử lại sau.',
-      },
-      { status }
+      { success: false, message: 'Không gửi được đơn hàng. Vui lòng thử lại sau.' },
+      { status: 500 }
     )
   }
 }

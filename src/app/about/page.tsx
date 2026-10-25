@@ -101,7 +101,7 @@ export default function About() {
                   niềm đam mê
                 </h2>
                 <p className="about-taste__section-text">
-                  Xuất phát từ con số 0 giữa lòng Sài Gòn, An Lạc Stone rong ruổi núi non và sông
+                  Xuất phát từ con số 0 giữa lòng Đà Nẵng, An Lạc Stone rong ruổi núi non và sông
                   suối để tìm những khối đá mang dấu ấn tự nhiên hiếm có.
                 </p>
                 <p className="about-taste__section-text">

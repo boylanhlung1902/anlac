@@ -14,43 +14,43 @@ type HeroSlide = {
 const carouselData: HeroSlide[] = [
   {
     id: 1,
-    image: '/images/hero2/phat-ngoi.jpg',
+    image: '/images/hero2/phat-sau.jpg',
     title: 'Tượng Phật ngồi thiền',
-    subtitle: 'Năm pho đá trắng trên một bệ',
+    subtitle: 'Sáu pho đá trắng xếp hai hàng',
     description:
-      'Năm tượng Phật ngồi thiền, tay đặt nhẹ trên lòng, áo khoác buông theo khối đá. Khuôn mặt còn đủ nét, xếp thành một hàng ngay ngắn.',
+      'Sáu tượng Phật ngồi xếp bằng, áo khoác buông theo vai và tay đặt trên lòng. Đá trắng mịn, búi tóc và nếp áo còn rõ, xếp thành hai hàng trước xưởng.',
   },
   {
     id: 2,
-    image: '/images/hero2/chu-tieu-dung.jpg',
+    image: '/images/hero2/chu-tieu-hang.jpg',
     title: 'Tượng chú tiểu',
-    subtitle: 'Mỗi dáng đứng một ý',
+    subtitle: 'Dãy đứng trước tường xưởng',
     description:
-      'Hàng chú tiểu đá trắng, người ôm bình, người giơ tay, người cầm sách. Nụ cười và nếp áo còn rõ, xếp thành một dãy trước xưởng.',
+      'Hàng chú tiểu đá trắng đứng trên bệ, người cầm gậy và bát, người giơ tay, người ôm chuỗi và mở sách. Nụ cười và nếp áo đọc được dưới nắng.',
   },
   {
     id: 3,
-    image: '/images/hero2/chu-tieu-bo.jpg',
+    image: '/images/hero2/chu-tieu-thuyen.jpg',
     title: 'Bộ chú tiểu đủ dáng',
-    subtitle: 'Nằm, chèo thuyền và đọc sách',
+    subtitle: 'Thuyền, lá sen và nón',
     description:
-      'Một bộ chú tiểu đủ tư thế: nằm trên lá sen, chèo thuyền, đội nón và cầm chuỗi. Đá trắng được mài nhẵn, từng ngón tay vẫn đọc được.',
+      'Bộ chú tiểu đủ tư thế: nằm trên lá sen, chèo thuyền, đội nón và chắp tay. Phía sau còn pho Di Lặc cười, đá trắng mài nhẵn từng ngón tay.',
   },
   {
     id: 4,
-    image: '/images/hero2/chu-tieu-nam.jpg',
+    image: '/images/hero2/chu-tieu-nam-2.jpg',
     title: 'Chú tiểu nằm nghiêng',
-    subtitle: 'Hai pho dài trên bệ đá',
+    subtitle: 'Hai pho dài trước sân',
     description:
-      'Hai tượng chú tiểu nằm nghiêng, một pho đội mũ và đeo chuỗi, pho kia gối đầu trên tay. Thân đá nằm trọn theo chiều ngang, mặt và tay không bị cắt.',
+      'Hai tượng chú tiểu nằm sấp, một pho đội mũ nhọn và đeo chuỗi, pho kia chống cằm và thắt bím. Thân đá nằm trọn theo chiều ngang, mặt và tay không bị cắt.',
   },
   {
     id: 5,
-    image: '/images/hero2/chu-tieu-loc.jpg',
+    image: '/images/hero2/chu-tieu-san.jpg',
     title: 'Chú tiểu mang lộc',
-    subtitle: 'Thỏi vàng, sách và đóa sen',
+    subtitle: 'Thỏi vàng, sách và quạt',
     description:
-      'Nhóm chú tiểu đá trắng, người nâng thỏi vàng, người bê chồng sách, người cầm đóa sen. Nụ cười và chuỗi hạt được chạm đủ, hợp đặt trước hiên nhà.',
+      'Nhóm chú tiểu đá trắng dưới hiên gỗ, người nâng thỏi vàng, người bê sách, người cầm quạt và đóa sen. Chuỗi hạt và nụ cười được chạm đủ.',
   },
 ]
 
