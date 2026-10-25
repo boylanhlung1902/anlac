@@ -2998,7 +2998,7 @@ h5.text-success {
   position: relative;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 20 / 9;
   border-radius: 0;
   overflow: hidden;
   background: #041434;
@@ -3208,7 +3208,7 @@ h5.text-success {
 @media (max-width: 767.98px) {
   .hero-carousel-react {
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 20 / 9;
   }
 
   .hero-carousel-react__veil {
