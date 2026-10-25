@@ -6,27 +6,24 @@ import Image from 'next/image'
 const carouselData = [
   {
     id: 1,
-    image: '/images/anlac/dai-phun-nuoc/001.jpg',
-    title: 'Đài phun nước',
-    subtitle: 'Điểm nhấn đá cho sân vườn',
-    description:
-      'Đài phun nước đá nhiều tầng, bố cục rõ và đặt trọn giữa không gian ngoài trời.',
+    image: '/images/hero/ban-ghe.jpg',
+    title: 'Bàn ghế đá',
+    subtitle: 'Mặt đá vân nguyên khối',
+    description: 'Bộ bàn ghế đá tự nhiên, đặt trọn giữa sân vườn.',
   },
   {
     id: 2,
-    image: '/images/anlac/tuong-phat-thich-ca/012.jpg',
-    title: 'Tượng Phật',
-    subtitle: 'Điêu khắc đá đường nét rõ',
-    description:
-      'Tượng Phật đá được đặt nổi bật, ánh sáng tự nhiên và phông xanh giúp hình tượng dễ nhìn.',
+    image: '/images/hero/ech.jpg',
+    title: 'Ếch đá phong thuỷ',
+    subtitle: 'Điểm nhấn cho sân sỏi',
+    description: 'Ếch đá granite, thân và chân hiện đủ trong một khung ngang.',
   },
   {
     id: 3,
-    image: '/images/anlac/phu-dieu/001.jpg',
-    title: 'Phù điêu',
-    subtitle: 'Hoa sen trong một khung tròn',
-    description:
-      'Phù điêu đá hoa sen, bố cục khép kín, dễ nhìn từ xa.',
+    image: '/images/hero/chu-tieu.jpg',
+    title: 'Tượng chú tiểu',
+    subtitle: 'Đường nét mặt còn rõ',
+    description: 'Tượng chú tiểu nằm trên quyển sách, khuôn mặt hiện đủ.',
   },
 ]
 
@@ -110,14 +107,6 @@ export default function HeroCarousel() {
               aria-hidden={!active}
             >
               <div className="hero-carousel-react__media">
-                <Image
-                  src={slide.image}
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  className="hero-carousel-react__img hero-carousel-react__img--fill"
-                  aria-hidden
-                />
                 <Image
                   src={slide.image}
                   alt={slide.title}

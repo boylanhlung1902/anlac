@@ -2997,7 +2997,8 @@ h5.text-success {
 .hero-carousel-react {
   position: relative;
   width: 100%;
-  height: clamp(460px, 42vw, 560px);
+  height: auto;
+  aspect-ratio: 16 / 9;
   border-radius: 0;
   overflow: hidden;
   background: #041434;
@@ -3038,15 +3039,8 @@ h5.text-success {
 }
 
 .hero-carousel-react__img {
-  object-fit: contain;
-  object-position: right center;
-}
-
-.hero-carousel-react__img--fill {
   object-fit: cover;
   object-position: center;
-  filter: blur(18px);
-  transform: scale(1.12);
 }
 
 .hero-carousel-react__veil {
@@ -3213,7 +3207,8 @@ h5.text-success {
 
 @media (max-width: 767.98px) {
   .hero-carousel-react {
-    height: 540px;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 
   .hero-carousel-react__veil {
@@ -3607,9 +3602,6 @@ h5.text-success {
     min-height: 420px;
   }
 
-  .hero-carousel-react__img {
-    object-position: center 18%;
-  }
 }
 
 @media (max-width: 767.98px) {
