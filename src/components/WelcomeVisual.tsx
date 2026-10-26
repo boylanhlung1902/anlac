@@ -37,9 +37,7 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
   },
 ]
 
-const FALLBACK_MS = 5600
 const CROSSFADE_MS = 1000
-const HANDOFF_LEAD_S = 1.35
 
 type Slot = 0 | 1
 
@@ -51,7 +49,7 @@ function prepareVideo(video: HTMLVideoElement) {
   video.muted = true
   video.defaultMuted = true
   video.playsInline = true
-  video.loop = true
+  video.loop = false
 }
 
 function whenFirstFrame(video: HTMLVideoElement, done: () => void) {
@@ -113,7 +111,7 @@ function elementHasClip(video: HTMLVideoElement, path: string) {
   return current.indexOf(path) !== -1
 }
 
-export default function WelcomeVisual() {
+function DesktopWelcome() {
   const [index, setIndex] = useState(0)
   const [front, setFront] = useState<Slot>(0)
   const [sources, setSources] = useState<[string, string]>([
@@ -124,6 +122,7 @@ export default function WelcomeVisual() {
     WELCOME_SLIDES[0].video,
     clipSrc(WELCOME_SLIDES[1].video) === WELCOME_SLIDES[1].video ? '' : clipSrc(WELCOME_SLIDES[1].video),
   ])
+  const [prefetch, setPrefetch] = useState(false)
 
   const indexRef = useRef(0)
   const frontRef = useRef<Slot>(0)
@@ -303,6 +302,7 @@ export default function WelcomeVisual() {
   }, [sources, media])
 
   useEffect(() => {
+    if (!prefetch) return
     let cancelled = false
     const order = [1, 2, 3, 4, 0].map((item) => WELCOME_SLIDES[item].video)
     const warmCache = async () => {
@@ -321,64 +321,57 @@ export default function WelcomeVisual() {
       const nextMedia: [string, string] = [mediaRef.current[0], nextPath]
       mediaRef.current = nextMedia
       setMedia(nextMedia)
-    }, 2200)
+    }, 1600)
     return () => {
       cancelled = true
       window.clearTimeout(fallback)
     }
-  }, [useCachedClip])
+  }, [prefetch, useCachedClip])
 
   useEffect(() => {
     const active = videoRefs.current[0]
-    const queued = videoRefs.current[1]
     if (!active) return
 
     let cancelled = false
     let retries = 0
     let retryTimer: number | undefined
+    let cacheTimer: number | undefined
+    let armed = false
+
+    const allowCache = () => {
+      if (cancelled || armed) return
+      armed = true
+      cacheTimer = window.setTimeout(() => {
+        if (!cancelled) setPrefetch(true)
+      }, 1200)
+    }
 
     const boot = () => {
-      if (cancelled) return
+      if (cancelled || frontRef.current !== 0) return
       prepareVideo(active)
       const attempt = active.play()
-      if (!attempt) return
-      void attempt
-        .then(() => {
-          if (cancelled || !queued) return
-          window.setTimeout(() => {
-            if (cancelled) return
-            if (!queued.currentSrc && !queued.src) return
-            prepareVideo(queued)
-            const warm = queued.play()
-            if (!warm) return
-            void warm
-              .then(() => whenFirstFrame(queued, () => {
-                if (frontRef.current !== 0) return
-                queued.pause()
-                holdFirstFrame(queued)
-              }))
-              .catch(() => {})
-          }, 900)
-        })
-        .catch(() => {
-          if (cancelled || retries >= 8) return
-          retries += 1
-          retryTimer = window.setTimeout(boot, 350)
-        })
+      if (!attempt) {
+        allowCache()
+        return
+      }
+      void attempt.then(allowCache).catch(() => {
+        if (cancelled || retries >= 8) return
+        retries += 1
+        retryTimer = window.setTimeout(boot, 400)
+      })
     }
 
     prepareVideo(active)
-    if (active.readyState >= 2) boot()
-    else {
-      active.addEventListener('loadeddata', boot)
-      active.addEventListener('canplay', boot)
-    }
+    boot()
+    active.addEventListener('loadeddata', boot)
+    active.addEventListener('canplay', boot)
 
     return () => {
       cancelled = true
       active.removeEventListener('loadeddata', boot)
       active.removeEventListener('canplay', boot)
       if (retryTimer) window.clearTimeout(retryTimer)
+      if (cacheTimer) window.clearTimeout(cacheTimer)
     }
   }, [])
 
@@ -391,21 +384,8 @@ export default function WelcomeVisual() {
       if (frontRef.current === incoming || busyRef.current) return
       if (!video.currentSrc && !video.src) return
       prepareVideo(video)
-      if (video.paused && video.currentTime >= 0.02 && video.currentTime <= 0.2) return
-      if (video.readyState < 2 || !video.paused || video.currentTime > 0.2) {
-        holdFirstFrame(video)
-        return
-      }
-      const attempt = video.play()
-      if (!attempt) {
-        holdFirstFrame(video)
-        return
-      }
-      void attempt.then(() => whenFirstFrame(video, () => {
-        if (frontRef.current === incoming || busyRef.current) return
-        video.pause()
-        holdFirstFrame(video)
-      })).catch(() => {})
+      video.pause()
+      holdFirstFrame(video)
     }
 
     video.addEventListener('loadeddata', warm)
@@ -417,56 +397,26 @@ export default function WelcomeVisual() {
     const video = videoRefs.current[front]
     if (!video) return
 
-    const onTime = () => {
-      if (busyRef.current || document.visibilityState === 'hidden') return
-      if (!Number.isFinite(video.duration) || video.duration <= HANDOFF_LEAD_S) return
-      if (video.currentTime < video.duration - HANDOFF_LEAD_S) return
+    const onEnded = () => {
+      if (busyRef.current) return
       goTo(indexRef.current + 1)
     }
-
-    const withFrame = video as HTMLVideoElement & {
-      requestVideoFrameCallback?: (callback: () => void) => number
-      cancelVideoFrameCallback?: (handle: number) => void
-    }
-    let frame = 0
-    const watch = () => {
-      onTime()
-      if (typeof withFrame.requestVideoFrameCallback === 'function') {
-        frame = withFrame.requestVideoFrameCallback(watch)
-      }
+    const resume = () => {
+      if (busyRef.current || document.visibilityState === 'hidden' || !video.paused) return
+      if (Number.isFinite(video.duration) && video.currentTime >= video.duration - 0.2) return
+      if (video.currentTime < 0.05) return
+      prepareVideo(video)
+      const attempt = video.play()
+      if (attempt) void attempt.catch(() => {})
     }
 
-    video.addEventListener('timeupdate', onTime)
-    watch()
+    video.addEventListener('ended', onEnded)
+    video.addEventListener('pause', resume)
     return () => {
-      video.removeEventListener('timeupdate', onTime)
-      if (frame && typeof withFrame.cancelVideoFrameCallback === 'function') {
-        withFrame.cancelVideoFrameCallback(frame)
-      }
+      video.removeEventListener('ended', onEnded)
+      video.removeEventListener('pause', resume)
     }
   }, [front, index, goTo])
-
-  useEffect(() => {
-    let cancelled = false
-    let timer = 0
-
-    const arm = (delay: number) => {
-      timer = window.setTimeout(() => {
-        if (cancelled) return
-        if (document.visibilityState === 'hidden' || busyRef.current) {
-          arm(500)
-          return
-        }
-        goTo(indexRef.current + 1)
-      }, delay)
-    }
-
-    arm(FALLBACK_MS)
-    return () => {
-      cancelled = true
-      window.clearTimeout(timer)
-    }
-  }, [index, goTo])
 
   return (
     <div className="taste-welcome__visual">
@@ -503,12 +453,20 @@ export default function WelcomeVisual() {
               key={slot}
               ref={(node) => {
                 videoRefs.current[slot] = node
+                if (!node) return
+                node.muted = true
+                node.defaultMuted = true
+                node.playsInline = true
+                node.setAttribute('muted', '')
+                node.setAttribute('playsinline', '')
+                node.setAttribute('webkit-playsinline', 'true')
               }}
               className={`taste-welcome__video${active ? ' is-front' : ''}`}
               src={media[slot] || undefined}
+              autoPlay={active}
               muted
               playsInline
-              preload="auto"
+              preload={active ? 'auto' : 'metadata'}
               aria-hidden={!active}
               aria-label={active ? WELCOME_SLIDES[index].alt : undefined}
             />
@@ -558,6 +516,168 @@ export default function WelcomeVisual() {
             onClick={() => goTo(i)}
           />
         ))}
+      </div>
+    </div>
+  )
+}
+
+function unlockPhoneVideo(video: HTMLVideoElement) {
+  video.muted = true
+  video.defaultMuted = true
+  video.playsInline = true
+  video.setAttribute('muted', '')
+  video.setAttribute('playsinline', '')
+  video.setAttribute('webkit-playsinline', 'true')
+  const attempt = video.play()
+  if (attempt) void attempt.catch(() => {})
+}
+
+function PhoneWelcome() {
+  const [index, setIndex] = useState(0)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const indexRef = useRef(0)
+  const advancingRef = useRef(false)
+  indexRef.current = index
+  const slide = WELCOME_SLIDES[index]
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    let cancelled = false
+    let retries = 0
+    let retryTimer = 0
+    advancingRef.current = false
+
+    const start = () => {
+      if (cancelled) return
+      unlockPhoneVideo(video)
+    }
+    const preloadNext = () => {
+      const next = WELCOME_SLIDES[(indexRef.current + 1) % WELCOME_SLIDES.length].video
+      if (document.head.querySelector(`link[data-welcome="${next}"]`)) return
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'video'
+      link.href = next
+      link.dataset.welcome = next
+      document.head.appendChild(link)
+    }
+    const advance = () => {
+      if (cancelled || advancingRef.current) return
+      advancingRef.current = true
+      setIndex((current) => (current + 1) % WELCOME_SLIDES.length)
+    }
+    const retry = () => {
+      if (cancelled || advancingRef.current || !video.paused) return
+      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - 0.2) return
+      if (retries >= 8) return
+      retries += 1
+      retryTimer = window.setTimeout(start, 400)
+    }
+
+    start()
+    video.addEventListener('loadeddata', start)
+    video.addEventListener('canplay', start)
+    video.addEventListener('playing', preloadNext)
+    video.addEventListener('ended', advance)
+    video.addEventListener('pause', retry)
+    document.addEventListener('touchstart', start, { passive: true })
+
+    return () => {
+      cancelled = true
+      video.removeEventListener('loadeddata', start)
+      video.removeEventListener('canplay', start)
+      video.removeEventListener('playing', preloadNext)
+      video.removeEventListener('ended', advance)
+      video.removeEventListener('pause', retry)
+      document.removeEventListener('touchstart', start)
+      window.clearTimeout(retryTimer)
+    }
+  }, [slide.video])
+
+  return (
+    <div className="taste-welcome__visual">
+      <div className="taste-welcome__frame">
+        <div className="taste-welcome__slide is-active" aria-hidden="true">
+          <Image
+            src={slide.accent}
+            alt=""
+            fill
+            sizes="100vw"
+            className="taste-welcome__img taste-welcome__img--fill"
+            aria-hidden
+          />
+        </div>
+        <video
+          ref={videoRef}
+          className="taste-welcome__video is-front"
+          src={slide.video}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          aria-label={slide.alt}
+        />
+        <div className="taste-welcome__scrim" aria-hidden="true" />
+      </div>
+      <div className="taste-welcome__accent" aria-hidden="true">
+        <div className="taste-welcome__accent-slide is-active">
+          <Image
+            src={slide.accent}
+            alt=""
+            fill
+            sizes="40vw"
+            className="taste-welcome__accent-img taste-welcome__accent-img--fill"
+            aria-hidden
+          />
+          <Image src={slide.accent} alt="" fill sizes="40vw" className="taste-welcome__accent-img" />
+        </div>
+      </div>
+      <div className="taste-welcome__dots" role="tablist" aria-label="Ảnh giới thiệu">
+        {WELCOME_SLIDES.map((item, itemIndex) => (
+          <button
+            key={`phone-dot-${item.video}`}
+            type="button"
+            role="tab"
+            aria-selected={itemIndex === index}
+            aria-label={item.alt}
+            className={`taste-welcome__dot${itemIndex === index ? ' is-active' : ''}`}
+            onClick={() => {
+              if (itemIndex === indexRef.current) return
+              setIndex(itemIndex)
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function isPhoneScreen() {
+  return window.matchMedia('(max-width: 767.98px), (hover: none) and (pointer: coarse) and (max-width: 1024px)').matches
+}
+
+export default function WelcomeVisual() {
+  const [mode, setMode] = useState<'pending' | 'phone' | 'desktop'>('pending')
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767.98px), (hover: none) and (pointer: coarse) and (max-width: 1024px)')
+    const apply = () => setMode(isPhoneScreen() ? 'phone' : 'desktop')
+    apply()
+    query.addEventListener('change', apply)
+    return () => query.removeEventListener('change', apply)
+  }, [])
+
+  if (mode === 'phone') return <PhoneWelcome />
+  if (mode === 'desktop') return <DesktopWelcome />
+
+  const slide = WELCOME_SLIDES[0]
+  return (
+    <div className="taste-welcome__visual">
+      <div className="taste-welcome__frame">
+        <div className="taste-welcome__slide is-active">
+          <Image src={slide.accent} alt="" fill sizes="100vw" className="taste-welcome__img taste-welcome__img--fill" aria-hidden />
+        </div>
       </div>
     </div>
   )
