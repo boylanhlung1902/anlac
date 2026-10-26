@@ -37,9 +37,9 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
   },
 ]
 
-const FALLBACK_MS = 7000
-const CROSSFADE_MS = 800
-const HANDOFF_LEAD_S = 0.9
+const FALLBACK_MS = 5600
+const CROSSFADE_MS = 1000
+const HANDOFF_LEAD_S = 1.35
 
 type Slot = 0 | 1
 
@@ -51,6 +51,7 @@ function prepareVideo(video: HTMLVideoElement) {
   video.muted = true
   video.defaultMuted = true
   video.playsInline = true
+  video.loop = true
 }
 
 function whenFirstFrame(video: HTMLVideoElement, done: () => void) {
@@ -61,7 +62,55 @@ function whenFirstFrame(video: HTMLVideoElement, done: () => void) {
     withFrame.requestVideoFrameCallback(() => done())
     return
   }
-  done()
+  if (video.readyState >= 2) {
+    done()
+    return
+  }
+  video.addEventListener('loadeddata', () => done(), { once: true })
+}
+
+function holdFirstFrame(video: HTMLVideoElement) {
+  if (video.readyState < 2 || !video.paused) return
+  try {
+    if (video.currentTime < 0.02 || video.currentTime > 0.2) video.currentTime = 0.04
+  } catch {
+    /* metadata can still be settling */
+  }
+}
+
+const clipCache = new Map<string, string>()
+const clipTasks = new Map<string, Promise<string>>()
+
+function rememberClip(path: string) {
+  const ready = clipCache.get(path)
+  if (ready) return Promise.resolve(ready)
+  let task = clipTasks.get(path)
+  if (!task) {
+    task = fetch(path, { cache: 'force-cache' })
+      .then((response) => {
+        if (!response.ok) throw new Error('miss')
+        return response.blob()
+      })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob)
+        clipCache.set(path, url)
+        return url
+      })
+      .catch(() => path)
+    clipTasks.set(path, task)
+  }
+  return task
+}
+
+function clipSrc(path: string) {
+  return clipCache.get(path) || path
+}
+
+function elementHasClip(video: HTMLVideoElement, path: string) {
+  const cached = clipCache.get(path)
+  const current = video.currentSrc || video.src
+  if (cached && current === cached) return true
+  return current.indexOf(path) !== -1
 }
 
 export default function WelcomeVisual() {
@@ -71,23 +120,51 @@ export default function WelcomeVisual() {
     WELCOME_SLIDES[0].video,
     WELCOME_SLIDES[1].video,
   ])
+  const [media, setMedia] = useState<[string, string]>([
+    WELCOME_SLIDES[0].video,
+    clipSrc(WELCOME_SLIDES[1].video) === WELCOME_SLIDES[1].video ? '' : clipSrc(WELCOME_SLIDES[1].video),
+  ])
 
   const indexRef = useRef(0)
   const frontRef = useRef<Slot>(0)
   const sourcesRef = useRef(sources)
+  const mediaRef = useRef(media)
   const busyRef = useRef(false)
   const pendingRef = useRef<number | null>(null)
   const videoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null])
   const beginFadeRef = useRef<(safe: number) => void>(() => {})
 
   sourcesRef.current = sources
+  mediaRef.current = media
 
-  const setSlotSource = useCallback((slot: Slot, src: string) => {
-    if (sourcesRef.current[slot] === src) return
-    const next: [string, string] = [sourcesRef.current[0], sourcesRef.current[1]]
-    next[slot] = src
-    sourcesRef.current = next
-    setSources(next)
+  const setSlotSource = useCallback((slot: Slot, path: string) => {
+    const url = clipSrc(path)
+    if (sourcesRef.current[slot] === path && mediaRef.current[slot] === url) return
+    const nextPaths: [string, string] = [sourcesRef.current[0], sourcesRef.current[1]]
+    const nextMedia: [string, string] = [mediaRef.current[0], mediaRef.current[1]]
+    nextPaths[slot] = path
+    nextMedia[slot] = url
+    sourcesRef.current = nextPaths
+    mediaRef.current = nextMedia
+    setSources(nextPaths)
+    setMedia(nextMedia)
+  }, [])
+
+  const useCachedClip = useCallback((path: string, url: string) => {
+    if (!url.startsWith('blob:')) return
+    const nextMedia: [string, string] = [mediaRef.current[0], mediaRef.current[1]]
+    let changed = false
+    ;([0, 1] as const).forEach((slot) => {
+      if (sourcesRef.current[slot] !== path || nextMedia[slot] === url) return
+      if (slot === frontRef.current && nextMedia[slot]) return
+      const video = videoRefs.current[slot]
+      if (video && nextMedia[slot] && video.readyState >= 3) return
+      nextMedia[slot] = url
+      changed = true
+    })
+    if (!changed) return
+    mediaRef.current = nextMedia
+    setMedia(nextMedia)
   }, [])
 
   beginFadeRef.current = (safe: number) => {
@@ -115,16 +192,26 @@ export default function WelcomeVisual() {
         setSlotSource(retired, WELCOME_SLIDES[follow].video)
         busyRef.current = false
         pendingRef.current = null
-      }, CROSSFADE_MS)
+      }, CROSSFADE_MS + 120)
     }
 
+    const failSafe = window.setTimeout(() => {
+      if (revealed) return
+      if (video.readyState >= 2 && !video.paused) reveal()
+      else busyRef.current = false
+    }, 700)
+
     const attempt = video.play()
-    if (attempt) {
-      void attempt.then(() => whenFirstFrame(video, reveal)).catch(() => reveal())
-    } else {
+    const started = () => whenFirstFrame(video, () => {
+      window.clearTimeout(failSafe)
       reveal()
-    }
-    window.setTimeout(reveal, 450)
+    })
+    if (attempt) {
+      void attempt.then(started).catch(() => {
+        window.clearTimeout(failSafe)
+        busyRef.current = false
+      })
+    } else started()
   }
 
   const goTo = useCallback((nextIndex: number) => {
@@ -138,7 +225,7 @@ export default function WelcomeVisual() {
     const video = videoRefs.current[incoming]
     busyRef.current = true
 
-    if (sourcesRef.current[incoming] === target && video && video.readyState >= 2) {
+    if (sourcesRef.current[incoming] === target && video && video.readyState >= 3) {
       beginFadeRef.current(safe)
       return
     }
@@ -155,10 +242,11 @@ export default function WelcomeVisual() {
     }
 
     const fire = () => {
-      if (pendingRef.current !== safe || video.readyState < 2) return
+      if (pendingRef.current !== safe || video.readyState < 3) return
       video.removeEventListener('loadeddata', fire)
       video.removeEventListener('canplay', fire)
       pendingRef.current = null
+      holdFirstFrame(video)
       beginFadeRef.current(safe)
     }
     video.addEventListener('loadeddata', fire)
@@ -167,9 +255,14 @@ export default function WelcomeVisual() {
       if (pendingRef.current !== safe) return
       video.removeEventListener('loadeddata', fire)
       video.removeEventListener('canplay', fire)
+      if (video.readyState < 2) {
+        pendingRef.current = null
+        busyRef.current = false
+        return
+      }
       pendingRef.current = null
       beginFadeRef.current(safe)
-    }, 2500)
+    }, 1800)
   }, [setSlotSource])
 
   useEffect(() => {
@@ -182,8 +275,7 @@ export default function WelcomeVisual() {
     let cancelled = false
     const wanted = WELCOME_SLIDES[pending].video
     const fire = () => {
-      const loaded = video.currentSrc.indexOf(wanted) !== -1
-      if (cancelled || pendingRef.current !== pending || video.readyState < 2 || !loaded) return
+      if (cancelled || pendingRef.current !== pending || video.readyState < 3 || !elementHasClip(video, wanted)) return
       pendingRef.current = null
       beginFadeRef.current(pending)
     }
@@ -193,9 +285,14 @@ export default function WelcomeVisual() {
     fire()
     const stall = window.setTimeout(() => {
       if (cancelled || pendingRef.current !== pending) return
+      if (video.readyState < 2) {
+        pendingRef.current = null
+        busyRef.current = false
+        return
+      }
       pendingRef.current = null
       beginFadeRef.current(pending)
-    }, 2500)
+    }, 1800)
 
     return () => {
       cancelled = true
@@ -203,7 +300,33 @@ export default function WelcomeVisual() {
       video.removeEventListener('canplay', fire)
       window.clearTimeout(stall)
     }
-  }, [sources])
+  }, [sources, media])
+
+  useEffect(() => {
+    let cancelled = false
+    const order = [1, 2, 3, 4, 0].map((item) => WELCOME_SLIDES[item].video)
+    const warmCache = async () => {
+      for (const path of order) {
+        if (cancelled) return
+        const url = await rememberClip(path)
+        if (cancelled) return
+        useCachedClip(path, url)
+      }
+    }
+    void warmCache()
+    const fallback = window.setTimeout(() => {
+      const nextPath = WELCOME_SLIDES[1].video
+      if (clipCache.has(nextPath) || mediaRef.current[1]) return
+      if (sourcesRef.current[1] !== nextPath || frontRef.current === 1) return
+      const nextMedia: [string, string] = [mediaRef.current[0], nextPath]
+      mediaRef.current = nextMedia
+      setMedia(nextMedia)
+    }, 2200)
+    return () => {
+      cancelled = true
+      window.clearTimeout(fallback)
+    }
+  }, [useCachedClip])
 
   useEffect(() => {
     const active = videoRefs.current[0]
@@ -222,15 +345,20 @@ export default function WelcomeVisual() {
       void attempt
         .then(() => {
           if (cancelled || !queued) return
-          prepareVideo(queued)
-          const warm = queued.play()
-          if (!warm) return
-          void warm
-            .then(() => {
-              queued.pause()
-              if (queued.currentTime > 0.05) queued.currentTime = 0.001
-            })
-            .catch(() => {})
+          window.setTimeout(() => {
+            if (cancelled) return
+            if (!queued.currentSrc && !queued.src) return
+            prepareVideo(queued)
+            const warm = queued.play()
+            if (!warm) return
+            void warm
+              .then(() => whenFirstFrame(queued, () => {
+                if (frontRef.current !== 0) return
+                queued.pause()
+                holdFirstFrame(queued)
+              }))
+              .catch(() => {})
+          }, 900)
         })
         .catch(() => {
           if (cancelled || retries >= 8) return
@@ -260,21 +388,30 @@ export default function WelcomeVisual() {
     if (!video || pendingRef.current != null) return
 
     const warm = () => {
-      if (frontRef.current === incoming) return
+      if (frontRef.current === incoming || busyRef.current) return
+      if (!video.currentSrc && !video.src) return
       prepareVideo(video)
-      if (video.readyState >= 2 && video.paused && video.currentTime < 0.05) {
-        try {
-          video.currentTime = 0.001
-        } catch {
-          /* metadata may still be settling */
-        }
+      if (video.paused && video.currentTime >= 0.02 && video.currentTime <= 0.2) return
+      if (video.readyState < 2 || !video.paused || video.currentTime > 0.2) {
+        holdFirstFrame(video)
+        return
       }
+      const attempt = video.play()
+      if (!attempt) {
+        holdFirstFrame(video)
+        return
+      }
+      void attempt.then(() => whenFirstFrame(video, () => {
+        if (frontRef.current === incoming || busyRef.current) return
+        video.pause()
+        holdFirstFrame(video)
+      })).catch(() => {})
     }
 
     video.addEventListener('loadeddata', warm)
     warm()
     return () => video.removeEventListener('loadeddata', warm)
-  }, [sources, front])
+  }, [sources, media, front])
 
   useEffect(() => {
     const video = videoRefs.current[front]
@@ -287,8 +424,26 @@ export default function WelcomeVisual() {
       goTo(indexRef.current + 1)
     }
 
+    const withFrame = video as HTMLVideoElement & {
+      requestVideoFrameCallback?: (callback: () => void) => number
+      cancelVideoFrameCallback?: (handle: number) => void
+    }
+    let frame = 0
+    const watch = () => {
+      onTime()
+      if (typeof withFrame.requestVideoFrameCallback === 'function') {
+        frame = withFrame.requestVideoFrameCallback(watch)
+      }
+    }
+
     video.addEventListener('timeupdate', onTime)
-    return () => video.removeEventListener('timeupdate', onTime)
+    watch()
+    return () => {
+      video.removeEventListener('timeupdate', onTime)
+      if (frame && typeof withFrame.cancelVideoFrameCallback === 'function') {
+        withFrame.cancelVideoFrameCallback(frame)
+      }
+    }
   }, [front, index, goTo])
 
   useEffect(() => {
@@ -350,8 +505,7 @@ export default function WelcomeVisual() {
                 videoRefs.current[slot] = node
               }}
               className={`taste-welcome__video${active ? ' is-front' : ''}`}
-              src={sources[slot]}
-              poster={slide.accent}
+              src={media[slot] || undefined}
               muted
               playsInline
               preload="auto"

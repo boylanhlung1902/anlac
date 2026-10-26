@@ -2793,7 +2793,7 @@ h5.text-success {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
   pointer-events: none;
 }
@@ -2811,8 +2811,9 @@ h5.text-success {
 
 .taste-welcome__img--fill {
   object-fit: cover;
-  filter: blur(16px);
-  transform: scale(1.12);
+  filter: blur(12px);
+  transform: scale(1.08) translateZ(0);
+  will-change: transform;
 }
 
 .taste-welcome__video {
@@ -2823,10 +2824,11 @@ h5.text-success {
   height: 100%;
   object-fit: contain;
   object-position: center;
-  opacity: 0;
+  opacity: 0.001;
   transform: translateZ(0);
   backface-visibility: hidden;
-  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
+  will-change: opacity;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
@@ -2862,7 +2864,7 @@ h5.text-success {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .taste-welcome__accent-slide.is-active {
