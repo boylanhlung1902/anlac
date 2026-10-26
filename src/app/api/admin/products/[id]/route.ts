@@ -22,6 +22,9 @@ const productSelect = {
   dimensions: true,
   material: true,
   origin: true,
+  craft: true,
+  warranty: true,
+  highlights: true,
   createdAt: true,
   updatedAt: true,
   category: { select: { id: true, name: true, slug: true } },
@@ -47,9 +50,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   if (!auth.ok) return auth.response
   const id = parseId(params.id)
   if (!id) return adminError(400, 'Mã sản phẩm không hợp lệ.')
-  const product = await auth.db.product.findUnique({ where: { id }, select: productSelect })
-  if (!product) return adminError(404, 'Không tìm thấy sản phẩm.')
-  return adminOk(serialize(product))
+  try {
+    const product = await auth.db.product.findUnique({ where: { id }, select: productSelect })
+    if (!product) return adminError(404, 'Không tìm thấy sản phẩm.')
+    return adminOk(serialize(product))
+  } catch (error) {
+    console.error('Admin product read failed', error instanceof Error ? error.name : 'error')
+    return adminError(500, 'Không tải được sản phẩm.')
+  }
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {

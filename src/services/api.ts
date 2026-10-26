@@ -18,6 +18,9 @@ export interface Product {
   dimensions?: string
   material?: string
   origin?: string
+  craft?: string | null
+  warranty?: string | null
+  highlights?: string[]
   createdAt: string
   updatedAt: string
 }

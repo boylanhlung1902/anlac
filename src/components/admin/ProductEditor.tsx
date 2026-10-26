@@ -6,6 +6,7 @@ import { adminFetch } from '@/lib/admin-client'
 import { markCatalogUpdated } from '@/lib/catalog-sync'
 import { useAdminPage } from '@/components/admin/AdminFrame'
 import { Notice } from '@/components/admin/AdminBits'
+import { DEFAULT_CRAFT, DEFAULT_HIGHLIGHTS, DEFAULT_WARRANTY } from '@/lib/product-detail'
 
 type CategoryOption = { id: number; name: string }
 type ProductDetail = {
@@ -23,6 +24,9 @@ type ProductDetail = {
   origin: string | null
   dimensions: string | null
   weight: number | null
+  craft: string | null
+  warranty: string | null
+  highlights: string[]
   slug: string
 }
 
@@ -40,15 +44,18 @@ const empty = {
   origin: '',
   dimensions: '',
   weight: '',
+  craft: '',
+  warranty: '',
+  highlights: '',
   slug: '',
 }
 
-export default function ProductEditor({ productId }: { productId?: number }) {
+export default function ProductEditor({ productId, heading }: { productId?: number; heading?: string }) {
   const router = useRouter()
   const editing = Number.isInteger(productId)
-  useAdminPage(editing ? 'Sửa sản phẩm' : 'Tạo sản phẩm', [
+  useAdminPage(heading || (editing ? 'Sửa sản phẩm' : 'Tạo sản phẩm'), [
     { label: 'Sản phẩm', href: '/admin/products' },
-    { label: editing ? 'Sửa' : 'Tạo' },
+    { label: heading || (editing ? 'Sửa' : 'Tạo') },
   ])
   const [form, setForm] = useState(empty)
   const [categories, setCategories] = useState<CategoryOption[]>([])
@@ -89,6 +96,9 @@ export default function ProductEditor({ productId }: { productId?: number }) {
         origin: product.origin || '',
         dimensions: product.dimensions || '',
         weight: product.weight == null ? '' : String(product.weight),
+        craft: product.craft || '',
+        warranty: product.warranty || '',
+        highlights: Array.isArray(product.highlights) ? product.highlights.join('\n') : '',
         slug: product.slug,
       })
       setLoading(false)
@@ -178,6 +188,9 @@ export default function ProductEditor({ productId }: { productId?: number }) {
       origin: result.data.origin || '',
       dimensions: result.data.dimensions || '',
       weight: result.data.weight == null ? '' : String(result.data.weight),
+      craft: result.data.craft || '',
+      warranty: result.data.warranty || '',
+      highlights: Array.isArray(result.data.highlights) ? result.data.highlights.join('\n') : '',
       slug: result.data.slug,
     })
     setNotice({ type: 'ok', text: result.message || 'Đã lưu sản phẩm.' })
@@ -188,7 +201,8 @@ export default function ProductEditor({ productId }: { productId?: number }) {
   return (
     <form className="admin-form" onSubmit={onSubmit}>
       <Notice notice={notice} />
-      <p className="admin-note admin-note--info">Schema hiện không có SKU, giá khuyến mãi hay biến thể. Giá 0 hiển thị “Liên hệ để báo giá” trên cửa hàng. Ảnh nhập bằng đường dẫn có sẵn, website chưa có kho upload.</p>
+      <p className="admin-note admin-note--info">Tên sản phẩm là tiêu đề trên danh sách và trang chi tiết. Tên danh mục chỉ hiện ở dòng nhỏ phía trên, ví dụ “Tượng chú tiểu nằm”. Giá 0 hiển thị “Liên hệ để báo giá”.</p>
+      <h2>Tiêu đề trang chi tiết</h2>
       <div className="admin-form__row">
         <label className="admin-field"><span>Tên sản phẩm</span><input value={form.name} onChange={(event) => update('name', event.target.value)} required /></label>
         <label className="admin-field"><span>Đường dẫn</span><input value={form.slug} onChange={(event) => update('slug', event.target.value)} placeholder="để trống sẽ tạo từ tên" /></label>
@@ -205,6 +219,7 @@ export default function ProductEditor({ productId }: { productId?: number }) {
         <label className="admin-field"><span>Giá VNĐ</span><input inputMode="numeric" value={form.priceVND} onChange={(event) => update('priceVND', event.target.value)} required /></label>
         <label className="admin-field"><span>Tồn kho</span><input inputMode="numeric" value={form.stock} onChange={(event) => update('stock', event.target.value)} required /></label>
       </div>
+      <h2>Ảnh trên trang chi tiết</h2>
       <div className="admin-field admin-field--wide">
         <span>Ảnh sản phẩm</span>
         <div className="admin-photos">
@@ -225,12 +240,23 @@ export default function ProductEditor({ productId }: { productId?: number }) {
       </div>
       <label className="admin-field admin-field--wide"><span>Đường dẫn ảnh chính</span><input value={form.image} onChange={(event) => update('image', event.target.value)} placeholder="/images/..." required /></label>
       <label className="admin-field admin-field--wide"><span>Ảnh thêm, mỗi dòng một đường dẫn</span><textarea value={form.images} onChange={(event) => update('images', event.target.value)} /></label>
+      <h2>Thông số</h2>
       <div className="admin-form__row">
-        <label className="admin-field"><span>Chất liệu</span><input value={form.material} onChange={(event) => update('material', event.target.value)} /></label>
-        <label className="admin-field"><span>Xuất xứ</span><input value={form.origin} onChange={(event) => update('origin', event.target.value)} /></label>
+        <label className="admin-field"><span>Chất liệu</span><input value={form.material} onChange={(event) => update('material', event.target.value)} placeholder="Đá tự nhiên cao cấp" /></label>
+        <label className="admin-field"><span>Xuất xứ</span><input value={form.origin} onChange={(event) => update('origin', event.target.value)} placeholder="Việt Nam" /></label>
         <label className="admin-field"><span>Kích thước</span><input value={form.dimensions} onChange={(event) => update('dimensions', event.target.value)} /></label>
         <label className="admin-field"><span>Khối lượng (kg)</span><input value={form.weight} onChange={(event) => update('weight', event.target.value)} /></label>
       </div>
+      <h2>Đặc điểm</h2>
+      <div className="admin-form__row">
+        <label className="admin-field"><span>Chế tác</span><input value={form.craft} onChange={(event) => update('craft', event.target.value)} placeholder={DEFAULT_CRAFT} /></label>
+        <label className="admin-field"><span>Bảo hành</span><input value={form.warranty} onChange={(event) => update('warranty', event.target.value)} placeholder={DEFAULT_WARRANTY} /></label>
+      </div>
+      <h2>Phù hợp không gian</h2>
+      <label className="admin-field admin-field--wide">
+        <span>Mỗi dòng một ý. Để trống sẽ dùng nội dung mặc định.</span>
+        <textarea value={form.highlights} onChange={(event) => update('highlights', event.target.value)} placeholder={DEFAULT_HIGHLIGHTS.join('\n')} />
+      </label>
       <div className="admin-form__row">
         <label className="admin-check"><input type="checkbox" checked={form.isActive} onChange={(event) => update('isActive', event.target.checked)} /> Đang bán</label>
         <label className="admin-check"><input type="checkbox" checked={form.isFeatured} onChange={(event) => update('isFeatured', event.target.checked)} /> Nổi bật</label>

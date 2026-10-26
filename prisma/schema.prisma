@@ -43,6 +43,9 @@ model Product {
   dimensions  String?
   material    String?
   origin      String?
+  craft       String?
+  warranty    String?
+  highlights  String[]    @default([])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   cartItems   CartItem[]

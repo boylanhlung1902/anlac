@@ -186,7 +186,7 @@ export default function ProductsPage() {
                   <td>{formatWhen(row.createdAt)}</td>
                   <td>
                     <div className="admin-row-actions">
-                      <Link className="admin-chip" href={`/admin/products/${row.id}`}>Xem</Link>
+                      <Link className="admin-chip" href={`/admin/products/${row.id}`}>Chi tiết</Link>
                       <Link className="admin-chip" href={`/admin/products/${row.id}/edit`}>Sửa</Link>
                       <button className="admin-chip" type="button" onClick={() => toggle(row)}>{row.isActive ? 'Ngừng bán' : 'Mở bán'}</button>
                       <button className="admin-chip admin-chip--danger" type="button" onClick={() => setPendingDelete(row)}>Xóa</button>

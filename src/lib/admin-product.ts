@@ -18,6 +18,9 @@ export type ProductWrite = {
   origin: string | null
   dimensions: string | null
   weight: number | null
+  craft: string | null
+  warranty: string | null
+  highlights: string[]
   slug: string
 }
 
@@ -53,6 +56,18 @@ export function parseProductWrite(body: unknown): { ok: true; data: ProductWrite
   const material = singleLine(String(source.material || ''), 120) || null
   const origin = singleLine(String(source.origin || ''), 120) || null
   const dimensions = singleLine(String(source.dimensions || ''), 120) || null
+  const craft = singleLine(String(source.craft || ''), 160) || null
+  const warranty = singleLine(String(source.warranty || ''), 160) || null
+  const highlightLines = Array.isArray(source.highlights)
+    ? source.highlights
+    : String(source.highlights || '').split(/\r?\n/)
+  const highlights: string[] = []
+  for (const item of highlightLines) {
+    const line = singleLine(String(item || ''), 80)
+    if (!line || highlights.includes(line)) continue
+    highlights.push(line)
+    if (highlights.length > 8) return { ok: false, message: 'Phù hợp không gian tối đa 8 dòng.' }
+  }
   const weightRaw = String(source.weight ?? '').trim()
   const weight = weightRaw === '' ? null : Number(weightRaw)
 
@@ -102,6 +117,9 @@ export function parseProductWrite(body: unknown): { ok: true; data: ProductWrite
       origin,
       dimensions,
       weight,
+      craft,
+      warranty,
+      highlights,
       slug,
     },
   }

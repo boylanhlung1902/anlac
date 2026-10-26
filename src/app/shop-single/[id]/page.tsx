@@ -10,6 +10,7 @@ import { useWishlist } from '@/contexts/WishlistContext'
 import { useState, useEffect, useCallback } from 'react'
 import { productAPI, formatPriceVND } from '@/services/api'
 import { watchCatalog } from '@/lib/catalog-sync'
+import { shownCraft, shownHighlights, shownWarranty } from '@/lib/product-detail'
 
 interface Product {
   id: number
@@ -27,6 +28,9 @@ interface Product {
   origin?: string
   dimensions?: string
   weight?: number
+  craft?: string | null
+  warranty?: string | null
+  highlights?: string[]
 }
 
 export default function ShopSingle({ params }: { params: { id: string } }) {
@@ -123,12 +127,9 @@ export default function ShopSingle({ params }: { params: { id: string } }) {
     { label: 'Trọng lượng', value: product.weight ? `${product.weight} kg` : undefined },
   ].filter((item) => Boolean(item.value))
 
-  const highlights = [
-    'Chế tác thủ công tinh xảo',
-    'Bảo hành 12 tháng',
-    'Tư vấn phong thủy theo không gian',
-    'Giao hàng toàn quốc',
-  ]
+  const highlights = shownHighlights(product.highlights)
+  const craft = shownCraft(product.craft)
+  const warranty = shownWarranty(product.warranty)
 
   const inWishlist = isInWishlist(product.id)
 
@@ -282,8 +283,8 @@ export default function ShopSingle({ params }: { params: { id: string } }) {
                   <ul>
                     <li>Chất liệu: {product.material || 'Đá tự nhiên cao cấp'}</li>
                     <li>Xuất xứ: {product.origin || 'Việt Nam'}</li>
-                    <li>Chế tác: Thủ công tinh xảo</li>
-                    <li>Bảo hành: 12 tháng</li>
+                    <li>Chế tác: {craft}</li>
+                    <li>Bảo hành: {warranty}</li>
                   </ul>
                 </div>
                 <div className="pdp-taste__details-card">
