@@ -3218,27 +3218,61 @@ h5.text-success {
 @media (max-width: 767.98px) {
   .hero-carousel-react {
     height: auto;
-    aspect-ratio: 20 / 9;
+    aspect-ratio: 4 / 5;
+    min-height: 420px;
   }
 
   .hero-carousel-react__veil {
-    background: linear-gradient(180deg, rgba(4, 20, 52, 0.15) 0%, rgba(4, 20, 52, 0.55) 38%, rgba(4, 20, 52, 0.92) 100%);
+    background: linear-gradient(180deg, rgba(4, 20, 52, 0.2) 0%, rgba(4, 20, 52, 0.45) 42%, rgba(4, 20, 52, 0.88) 100%);
   }
 
   .hero-carousel-react__copy {
     width: 100%;
     justify-content: flex-end;
-    padding: 1.25rem 3.4rem 3.6rem;
+    padding: 4.5rem 1.15rem 2.5rem;
+  }
+
+  .hero-carousel-react__kicker {
+    margin-bottom: 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
   }
 
   .hero-carousel-react__title {
-    font-size: 1.85rem;
+    margin-bottom: 0.2rem;
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+
+  .hero-carousel-react__subtitle {
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+  }
+
+  .hero-carousel-react__desc {
+    font-size: 0.86rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 
   .hero-carousel-react .carousel-control-prev,
   .hero-carousel-react .carousel-control-next {
-    width: 38px;
-    height: 38px;
+    top: 1rem;
+    bottom: auto;
+    width: 36px;
+    height: 36px;
+    transform: none;
+  }
+
+  .hero-carousel-react .carousel-control-prev {
+    left: 0.75rem;
+  }
+
+  .hero-carousel-react .carousel-control-next {
+    right: 0.75rem;
   }
 }
 
