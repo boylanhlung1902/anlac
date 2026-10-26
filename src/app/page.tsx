@@ -12,7 +12,7 @@ import { useCart } from '@/contexts/CartContext'
 import { useWishlist } from '@/contexts/WishlistContext'
 import { useState } from 'react'
 import highlights from '../../data/home-highlights.json'
-import { useHomeVisibility, visibleHighlights } from '@/lib/home-visibility'
+import { presentHomeCategories, presentHomeProducts, useHomeVisibility } from '@/lib/home-visibility'
 
 export default function Home() {
   const { addToCart } = useCart()
@@ -75,8 +75,8 @@ export default function Home() {
   }
 
   const visibility = useHomeVisibility()
-  const craftCategories = visibleHighlights(visibility.status, visibility.categorySlugs, highlights.categories, (category) => category.slug)
-  const featuredProducts = visibleHighlights(visibility.status, visibility.productIds, highlights.featured, (product) => product.id)
+  const craftCategories = presentHomeCategories(visibility, highlights.categories)
+  const featuredProducts = presentHomeProducts(visibility, highlights.featured)
   const featuredMore = featuredProducts.slice(3)
 
   const stats = [

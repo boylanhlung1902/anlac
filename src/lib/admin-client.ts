@@ -11,6 +11,7 @@ export type AdminResult<T> = {
 export async function adminFetch<T>(url: string, init?: RequestInit): Promise<AdminResult<T>> {
   const response = await fetch(url, {
     ...init,
+    cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers || {}),

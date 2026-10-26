@@ -1,5 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { findCatalogProduct, readFromDatabase } from '../../../../../lib/catalog'
+import { noStoreJson } from '@/lib/no-store-json'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET(
   request: NextRequest,
@@ -9,13 +13,13 @@ export async function GET(
     const id = parseInt(params.id)
 
     if (isNaN(id)) {
-      return NextResponse.json(
+      return noStoreJson(
         { 
           success: false,
           error: 'Invalid product ID',
           message: 'Product ID must be a valid number'
         },
-        { status: 400 }
+        400
       )
     }
 
@@ -32,29 +36,29 @@ export async function GET(
     const category = product?.category
     const categoryHidden = Boolean(category && 'isActive' in category && category.isActive === false)
     if (!product || product.isActive === false || categoryHidden) {
-      return NextResponse.json(
+      return noStoreJson(
         { 
           success: false,
           error: 'Product not found',
           message: 'Product with this ID does not exist'
         },
-        { status: 404 }
+        404
       )
     }
 
-    return NextResponse.json({
+    return noStoreJson({
       success: true,
       data: product
     })
   } catch (error) {
     console.error('Error fetching product:', error)
-    return NextResponse.json(
+    return noStoreJson(
       { 
         success: false,
         error: 'Internal server error',
         message: 'Không thể tải sản phẩm.'
       },
-      { status: 500 }
+      500
     )
   }
 }

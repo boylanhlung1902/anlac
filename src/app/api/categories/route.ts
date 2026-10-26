@@ -1,5 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { queryCatalogCategories, readFromDatabase } from '../../../../lib/catalog'
+import { noStoreJson } from '@/lib/no-store-json'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,20 +29,20 @@ export async function GET(request: NextRequest) {
     )
     const categories = loaded.ok ? loaded.value : queryCatalogCategories(includeProducts)
 
-    return NextResponse.json({
+    return noStoreJson({
       success: true,
       data: categories,
       count: categories.length
     })
   } catch (error) {
     console.error('Error fetching categories:', error)
-    return NextResponse.json(
+    return noStoreJson(
       { 
         success: false,
         error: 'Internal server error',
         message: 'Không thể tải danh mục.'
       },
-      { status: 500 }
+      500
     )
   }
 }

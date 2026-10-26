@@ -7,8 +7,9 @@ import Reveal from '@/components/Reveal'
 import Link from 'next/link'
 import { useCart } from '@/contexts/CartContext'
 import { useWishlist } from '@/contexts/WishlistContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { productAPI, formatPriceVND } from '@/services/api'
+import { watchCatalog } from '@/lib/catalog-sync'
 
 interface Product {
   id: number
@@ -38,22 +39,25 @@ export default function ShopSingle({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1)
   const [isAdded, setIsAdded] = useState(false)
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true)
-        const productData = await productAPI.getProduct(parseInt(params.id))
-        setProduct(productData)
-      } catch (err) {
-        setError('Có lỗi xảy ra khi tải sản phẩm')
-        console.error('Error fetching product:', err)
-      } finally {
-        setLoading(false)
-      }
+  const loadProduct = useCallback(async (silent = false) => {
+    try {
+      if (!silent) setLoading(true)
+      const productData = await productAPI.getProduct(parseInt(params.id, 10))
+      setProduct(productData)
+      setError(null)
+    } catch (err) {
+      if (!silent) setError('Có lỗi xảy ra khi tải sản phẩm')
+      console.error('Error fetching product:', err)
+    } finally {
+      if (!silent) setLoading(false)
     }
-
-    fetchProduct()
   }, [params.id])
+
+  useEffect(() => {
+    void loadProduct()
+  }, [loadProduct])
+
+  useEffect(() => watchCatalog(() => { void loadProduct(true) }), [loadProduct])
 
   const handleAddToCart = () => {
     if (!product) return

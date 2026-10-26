@@ -4,12 +4,12 @@ import Link from 'next/link'
 import highlights from '../../data/home-highlights.json'
 import { phoneHref } from '@/lib/store-defaults'
 import { useStoreInfo } from '@/lib/use-store'
-import { useHomeVisibility, visibleHighlights } from '@/lib/home-visibility'
+import { presentHomeCategories, useHomeVisibility } from '@/lib/home-visibility'
 
 export default function Footer() {
   const store = useStoreInfo()
   const visibility = useHomeVisibility()
-  const categories = visibleHighlights(visibility.status, visibility.categorySlugs, highlights.categories, (category) => category.slug)
+  const categories = presentHomeCategories(visibility, highlights.categories)
   return (
     <footer className="bg-dark" id="tempaltemo_footer">
       <div className="container">

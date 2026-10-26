@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useAdminPage } from '@/components/admin/AdminFrame'
 import { ConfirmDialog, Empty, Notice, Pager } from '@/components/admin/AdminBits'
 import { adminFetch, PageInfo } from '@/lib/admin-client'
 import { formatWhen } from '@/lib/admin-labels'
+import { markCatalogUpdated, watchCatalog } from '@/lib/catalog-sync'
 import { formatPriceVND } from '@/services/api'
 
 type Row = {
@@ -42,7 +43,8 @@ export default function ProductsPage() {
     })
   }, [])
 
-  useEffect(() => {
+  const requestRef = useRef(0)
+  const load = useCallback((silent = false) => {
     const params = new URLSearchParams({
       page: String(currentPage),
       sort,
@@ -52,8 +54,10 @@ export default function ProductsPage() {
       status: status === 'low' ? 'all' : status,
     })
     if (status === 'low') params.set('lowStock', '1')
-    setLoading(true)
+    const requestId = ++requestRef.current
+    if (!silent) setLoading(true)
     adminFetch<{ products: Row[]; pagination: PageInfo }>(`/api/admin/products?${params}`).then((result) => {
+      if (requestId !== requestRef.current) return
       setLoading(false)
       if (!result.ok) {
         setNotice({ type: 'err', text: result.message })
@@ -63,6 +67,12 @@ export default function ProductsPage() {
       setPage(result.data.pagination)
     })
   }, [currentPage, sort, order, status, search, categoryId])
+
+  useEffect(() => { load() }, [load])
+
+  const loadRef = useRef(load)
+  loadRef.current = load
+  useEffect(() => watchCatalog(() => loadRef.current(true)), [])
 
   function onFilter(event: FormEvent) {
     event.preventDefault()
@@ -81,7 +91,10 @@ export default function ProductsPage() {
       body: JSON.stringify({ stock }),
     })
     setNotice(result.ok ? { type: 'ok', text: 'Đã cập nhật tồn kho.' } : { type: 'err', text: result.message })
-    if (result.ok) setRows((current) => current.map((item) => item.id === row.id ? { ...item, stock } : item))
+    if (result.ok) {
+      setRows((current) => current.map((item) => item.id === row.id ? { ...item, stock } : item))
+      markCatalogUpdated()
+    }
   }
 
   async function toggle(row: Row) {
@@ -90,7 +103,10 @@ export default function ProductsPage() {
       body: JSON.stringify({ isActive: !row.isActive }),
     })
     setNotice(result.ok ? { type: 'ok', text: result.message || 'Đã cập nhật.' } : { type: 'err', text: result.message })
-    if (result.ok) setRows((current) => current.map((item) => item.id === row.id ? { ...item, isActive: !item.isActive } : item))
+    if (result.ok) {
+      setRows((current) => current.map((item) => item.id === row.id ? { ...item, isActive: !item.isActive } : item))
+      markCatalogUpdated()
+    }
   }
 
   async function remove() {
@@ -99,7 +115,10 @@ export default function ProductsPage() {
     const result = await adminFetch(`/api/admin/products/${pendingDelete.id}`, { method: 'DELETE' })
     setBusy(false)
     setNotice(result.ok ? { type: 'ok', text: result.message || 'Đã xóa.' } : { type: 'err', text: result.message })
-    if (result.ok) setRows((current) => current.filter((item) => item.id !== pendingDelete.id))
+    if (result.ok) {
+      setRows((current) => current.filter((item) => item.id !== pendingDelete.id))
+      markCatalogUpdated()
+    }
     setPendingDelete(null)
   }
 

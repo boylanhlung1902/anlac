@@ -1,5 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { queryCatalogProducts, readFromDatabase } from '../../../../lib/catalog'
+import { noStoreJson } from '@/lib/no-store-json'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET(request: NextRequest) {
   try {
@@ -108,7 +112,7 @@ export async function GET(request: NextRequest) {
     if (loaded.ok) {
       const { products, total } = loaded.value
       const totalPages = Math.ceil(total / limit)
-      return NextResponse.json({
+      return noStoreJson({
         success: true,
         data: {
           products,
@@ -124,7 +128,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    return NextResponse.json({
+    return noStoreJson({
       success: true,
       data: queryCatalogProducts({
         page,
@@ -139,13 +143,13 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error fetching products:', error)
-    return NextResponse.json(
+    return noStoreJson(
       { 
         success: false,
         error: 'Internal server error',
         message: 'Không thể tải danh sách sản phẩm.'
       },
-      { status: 500 }
+      500
     )
   }
 } 

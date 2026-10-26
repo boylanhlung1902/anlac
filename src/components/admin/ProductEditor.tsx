@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { adminFetch } from '@/lib/admin-client'
+import { markCatalogUpdated } from '@/lib/catalog-sync'
 import { useAdminPage } from '@/components/admin/AdminFrame'
 import { Notice } from '@/components/admin/AdminBits'
 
@@ -157,10 +158,28 @@ export default function ProductEditor({ productId }: { productId?: number }) {
       setNotice({ type: 'err', text: result.message })
       return
     }
+    markCatalogUpdated()
     if (!editing) {
       router.replace(`/admin/products/${result.data.id}/edit`)
       return
     }
+    const savedImages = Array.isArray(result.data.images) ? result.data.images : []
+    setForm({
+      name: result.data.name,
+      description: result.data.description,
+      categoryId: String(result.data.categoryId),
+      priceVND: String(result.data.priceVND),
+      stock: String(result.data.stock),
+      image: result.data.image,
+      images: savedImages.filter((image) => image !== result.data.image).join('\n'),
+      isActive: result.data.isActive,
+      isFeatured: result.data.isFeatured,
+      material: result.data.material || '',
+      origin: result.data.origin || '',
+      dimensions: result.data.dimensions || '',
+      weight: result.data.weight == null ? '' : String(result.data.weight),
+      slug: result.data.slug,
+    })
     setNotice({ type: 'ok', text: result.message || 'Đã lưu sản phẩm.' })
   }
 

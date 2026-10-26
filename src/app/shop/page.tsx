@@ -10,6 +10,7 @@ import { useWishlist } from '@/contexts/WishlistContext'
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { productAPI, categoryAPI, Product, Category, formatPriceVND } from '@/services/api'
+import { watchCatalog } from '@/lib/catalog-sync'
 
 function pageWindow(current: number, total: number): Array<number | 'gap'> {
   const sibling = 1
@@ -111,10 +112,10 @@ function ShopContent() {
     setPagination((prev) => (prev.page === 1 ? prev : { ...prev, page: 1 }))
   }, [filters.category, filters.search, filters.sortBy, filters.sortOrder])
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (silent = false) => {
     const requestId = ++requestIdRef.current
     try {
-      setLoading(true)
+      if (!silent) setLoading(true)
       setError(null)
 
       const [productsResponse, categoriesResponse] = await Promise.all([
@@ -154,6 +155,10 @@ function ShopContent() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  const loadRef = useRef(loadData)
+  loadRef.current = loadData
+  useEffect(() => watchCatalog(() => { void loadRef.current(true) }), [])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -247,7 +252,7 @@ function ShopContent() {
           <i className="fas fa-exclamation-triangle" aria-hidden="true" />
           <span>{error}</span>
         </div>
-        <button type="button" className="btn btn-success taste-btn" onClick={loadData}>
+        <button type="button" className="btn btn-success taste-btn" onClick={() => { void loadData() }}>
           Thử lại
         </button>
       </div>

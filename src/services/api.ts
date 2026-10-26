@@ -66,11 +66,12 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 // Generic API call function
 async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
     },
-    ...options,
   })
 
   if (!response.ok) {

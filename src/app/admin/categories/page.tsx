@@ -1,9 +1,10 @@
 'use client'
 
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { useAdminPage } from '@/components/admin/AdminFrame'
 import { ConfirmDialog, Empty, Notice, Pager } from '@/components/admin/AdminBits'
 import { adminFetch, PageInfo } from '@/lib/admin-client'
+import { markCatalogUpdated, watchCatalog } from '@/lib/catalog-sync'
 
 type CategoryRow = {
   id: number
@@ -44,6 +45,10 @@ export default function CategoriesPage() {
   }
 
   useEffect(() => { load(currentPage, search) }, [currentPage])
+
+  const loadRef = useRef(load)
+  loadRef.current = load
+  useEffect(() => watchCatalog(() => loadRef.current()), [])
 
   function openEdit(row: CategoryRow) {
     setCreating(false)
@@ -89,6 +94,7 @@ export default function CategoriesPage() {
     if (result.ok) {
       setEditing(null)
       setCreating(false)
+      markCatalogUpdated()
       load()
     }
   }
@@ -99,7 +105,10 @@ export default function CategoriesPage() {
       body: JSON.stringify({ isActive: !row.isActive }),
     })
     setNotice(result.ok ? { type: 'ok', text: row.isActive ? 'Đã ẩn danh mục trên cửa hàng.' : 'Đã hiện danh mục trên cửa hàng.' } : { type: 'err', text: result.message })
-    if (result.ok) setRows((current) => current.map((item) => item.id === row.id ? { ...item, isActive: !item.isActive } : item))
+    if (result.ok) {
+      setRows((current) => current.map((item) => item.id === row.id ? { ...item, isActive: !item.isActive } : item))
+      markCatalogUpdated()
+    }
   }
 
   async function remove() {
@@ -109,7 +118,10 @@ export default function CategoriesPage() {
     setBusy(false)
     setNotice(result.ok ? { type: 'ok', text: result.message || 'Đã xóa.' } : { type: 'err', text: result.message })
     setPendingDelete(null)
-    if (result.ok) load()
+    if (result.ok) {
+      markCatalogUpdated()
+      load()
+    }
   }
 
   return (

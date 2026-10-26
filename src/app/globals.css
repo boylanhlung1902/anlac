@@ -3547,6 +3547,10 @@ h5.text-success {
   font-size: 0.95rem;
   line-height: 1.5;
   max-width: 42ch;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .taste-featured-card__price {
