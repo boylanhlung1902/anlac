@@ -2793,20 +2793,13 @@ h5.text-success {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transform: scale(1.04) translateX(10px);
-  filter: blur(3px) saturate(0.9);
-  transition:
-    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.45s ease;
+  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
   z-index: 0;
   pointer-events: none;
 }
 
 .taste-welcome__slide.is-active {
   opacity: 1;
-  transform: scale(1) translateX(0);
-  filter: blur(0) saturate(1);
   z-index: 1;
   pointer-events: auto;
 }
@@ -2830,6 +2823,15 @@ h5.text-success {
   height: 100%;
   object-fit: contain;
   object-position: center;
+  opacity: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.taste-welcome__video.is-front {
+  opacity: 1;
 }
 
 .taste-welcome__scrim {
@@ -2860,15 +2862,11 @@ h5.text-success {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transform: scale(1.05) translateY(6px);
-  transition:
-    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s,
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+  transition: opacity 0.8s cubic-bezier(0.45, 0, 0.2, 1);
 }
 
 .taste-welcome__accent-slide.is-active {
   opacity: 1;
-  transform: scale(1) translateY(0);
 }
 
 .taste-welcome__accent-img {
@@ -2918,15 +2916,6 @@ h5.text-success {
   .taste-welcome__accent-slide,
   .taste-welcome__dot {
     transition: none;
-  }
-
-  .taste-welcome__slide {
-    transform: none;
-    filter: none;
-  }
-
-  .taste-welcome__accent-slide {
-    transform: none;
   }
 }
 
@@ -3181,8 +3170,35 @@ h5.text-success {
   border: 1px solid rgba(255, 255, 255, 0.28);
   background: rgba(4, 20, 52, 0.42);
   backdrop-filter: blur(8px);
-  opacity: 1;
+  opacity: 0;
+  pointer-events: none;
   color: #fff;
+  transition: opacity 0.25s ease, background 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-carousel-react:hover .carousel-control-prev,
+  .hero-carousel-react:hover .carousel-control-next,
+  .hero-carousel-react:focus-within .carousel-control-prev,
+  .hero-carousel-react:focus-within .carousel-control-next {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hero-carousel-react:hover .carousel-control-prev:disabled,
+  .hero-carousel-react:hover .carousel-control-next:disabled,
+  .hero-carousel-react:focus-within .carousel-control-prev:disabled,
+  .hero-carousel-react:focus-within .carousel-control-next:disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+}
+
+@media (hover: none) {
+  .hero-carousel-react .carousel-control-prev,
+  .hero-carousel-react .carousel-control-next {
+    display: none;
+  }
 }
 
 .hero-carousel-react .carousel-control-prev {
@@ -3200,7 +3216,6 @@ h5.text-success {
 
 .hero-carousel-react .carousel-control-prev:disabled,
 .hero-carousel-react .carousel-control-next:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -3261,11 +3276,11 @@ h5.text-success {
 
   .hero-carousel-react .carousel-control-prev,
   .hero-carousel-react .carousel-control-next {
-    top: 1rem;
+    top: 50%;
     bottom: auto;
     width: 36px;
     height: 36px;
-    transform: none;
+    transform: translateY(-50%);
   }
 
   .hero-carousel-react .carousel-control-prev {
