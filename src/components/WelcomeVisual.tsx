@@ -42,7 +42,7 @@ const INTERVAL_MS = 6500
 export default function WelcomeVisual() {
   const [index, setIndex] = useState(0)
   const indexRef = useRef(0)
-  const videoRefs = useRef<Array<HTMLVideoElement | null>>([])
+  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const goTo = useCallback((next: number) => {
     const safe = ((next % WELCOME_SLIDES.length) + WELCOME_SLIDES.length) % WELCOME_SLIDES.length
@@ -51,56 +51,38 @@ export default function WelcomeVisual() {
   }, [])
 
   useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
     let cancelled = false
-    const cleanups: Array<() => void> = []
+    let retries = 0
+    let retryTimer: number | undefined
 
-    videoRefs.current.forEach((video, i) => {
-      if (!video) return
+    video.muted = true
+    video.defaultMuted = true
+    video.playsInline = true
+
+    const start = () => {
+      if (cancelled || indexRef.current !== index) return
       video.muted = true
-      video.playsInline = true
-      if (i !== index) {
-        video.pause()
-        return
-      }
-
-      let retries = 0
-      let retryTimer: number | undefined
-      const start = () => {
-        if (cancelled) return
-        video.muted = true
-        const attempt = video.play()
-        if (!attempt) return
-        void attempt.catch(() => {
-          if (cancelled || retries >= 8) return
-          retries += 1
-          retryTimer = window.setTimeout(start, 300)
-        })
-      }
-
-      if (video.currentTime > 0.05) {
-        const onSeeked = () => start()
-        video.addEventListener('seeked', onSeeked, { once: true })
-        video.currentTime = 0
-        cleanups.push(() => {
-          video.removeEventListener('seeked', onSeeked)
-          if (retryTimer) window.clearTimeout(retryTimer)
-        })
-        return
-      }
-
-      if (video.readyState >= 2) start()
-      else {
-        video.addEventListener('canplay', start, { once: true })
-        cleanups.push(() => video.removeEventListener('canplay', start))
-      }
-      cleanups.push(() => {
-        if (retryTimer) window.clearTimeout(retryTimer)
+      const attempt = video.play()
+      if (!attempt) return
+      void attempt.catch(() => {
+        if (cancelled || retries >= 8) return
+        retries += 1
+        retryTimer = window.setTimeout(start, 350)
       })
-    })
+    }
+
+    const onReady = () => start()
+    video.addEventListener('loadeddata', onReady)
+    video.addEventListener('canplay', onReady)
+    start()
 
     return () => {
       cancelled = true
-      cleanups.forEach((cleanup) => cleanup())
+      video.removeEventListener('loadeddata', onReady)
+      video.removeEventListener('canplay', onReady)
+      if (retryTimer) window.clearTimeout(retryTimer)
     }
   }, [index])
 
@@ -151,26 +133,20 @@ export default function WelcomeVisual() {
                 className="taste-welcome__img taste-welcome__img--fill"
                 aria-hidden
               />
-              <video
-                ref={(node) => {
-                  videoRefs.current[i] = node
-                  if (!node) return
-                  node.muted = true
-                  node.defaultMuted = true
-                  node.playsInline = true
-                }}
-                className="taste-welcome__video"
-                src={slide.video}
-                poster={slide.accent}
-                autoPlay={i === 0}
-                muted
-                playsInline
-                preload={active || i === (index + 1) % WELCOME_SLIDES.length ? 'auto' : 'metadata'}
-                aria-label={slide.alt}
-              />
             </div>
           )
         })}
+        <video
+          ref={videoRef}
+          className="taste-welcome__video"
+          src={WELCOME_SLIDES[index].video}
+          poster={WELCOME_SLIDES[index].accent}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          aria-label={WELCOME_SLIDES[index].alt}
+        />
         <div className="taste-welcome__scrim" aria-hidden="true" />
       </div>
 
