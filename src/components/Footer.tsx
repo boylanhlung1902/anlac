@@ -112,10 +112,10 @@ export default function Footer() {
                 </div>
                 <div className="col-12 col-md-6">
                   <p className="text-end text-light">
-                    <a className="text-decoration-none text-light" href="https://fb.com/stoneart" target="_blank"><i className="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
-                    <a className="text-decoration-none text-light" href="https://www.instagram.com/stoneart" target="_blank"><i className="fab fa-instagram fa-sm fa-fw me-2"></i></a>
-                    <a className="text-decoration-none text-light" href="https://twitter.com/stoneart" target="_blank"><i className="fab fa-twitter fa-sm fa-fw me-2"></i></a>
-                    <a className="text-decoration-none text-light" href="https://www.youtube.com/stoneart" target="_blank"><i className="fab fa-youtube fa-sm fa-fw"></i></a>
+                    <a className="text-decoration-none text-light" href="https://web.facebook.com/an.lac.stone/" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+                    <a className="text-decoration-none text-light" href="https://web.facebook.com/an.lac.stone/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+                    <a className="text-decoration-none text-light" href="https://web.facebook.com/an.lac.stone/" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter fa-sm fa-fw me-2"></i></a>
+                    <a className="text-decoration-none text-light" href="https://web.facebook.com/an.lac.stone/" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube fa-sm fa-fw"></i></a>
                   </p>
                 </div>
               </div>

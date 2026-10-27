@@ -91,7 +91,7 @@ export default function Home() {
       <Header />
 
       {/* Welcome - asymmetric split */}
-      <HomeSection image="/images/anlac/dai-phun-nuoc/001.jpg" className="home-welcome" tone="dark">
+      <HomeSection image="/images/home/welcome-bg.jpg" className="home-welcome" tone="dark">
         <div className="container">
           <div className="taste-welcome-grid">
             <Reveal className="taste-welcome">
