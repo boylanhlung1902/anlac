@@ -9,15 +9,38 @@ async function releaseTakenSlug(
   id: number
 ) {
   await prisma.$executeRawUnsafe(
-    `UPDATE ${table} SET slug = slug || '-retired-' || id WHERE slug = $1 AND id <> $2`,
+    `UPDATE ${table} SET slug = slug || '-retired-' || id::text WHERE slug = $1 AND id <> $2`,
     slug,
     id
   )
 }
 
+/** Category.name is @unique — free the name on other rows before upserting remapped ids. */
+async function releaseTakenCategoryName(name: string, id: number) {
+  await prisma.$executeRawUnsafe(
+    `UPDATE categories SET name = name || '-retired-' || id::text WHERE name = $1 AND id <> $2`,
+    name,
+    id
+  )
+}
+
+function productDetailFields(product: (typeof catalog.products)[number]) {
+  const snapshot = product as typeof product & {
+    craft?: string | null
+    warranty?: string | null
+    highlights?: string[]
+  }
+  return {
+    craft: snapshot.craft ?? null,
+    warranty: snapshot.warranty ?? null,
+    highlights: Array.isArray(snapshot.highlights) ? snapshot.highlights : [],
+  }
+}
+
 async function main() {
   for (const category of catalog.categories) {
     await releaseTakenSlug('categories', category.slug, category.id)
+    await releaseTakenCategoryName(category.name, category.id)
   }
   for (const product of catalog.products) {
     await releaseTakenSlug('products', product.slug, product.id)
@@ -29,6 +52,7 @@ async function main() {
       description: category.description,
       image: category.image,
       slug: category.slug,
+      isActive: true,
     }
     await prisma.category.upsert({
       where: { id: category.id },
@@ -63,11 +87,7 @@ async function main() {
       dimensions: product.dimensions,
       material: product.material,
       origin: product.origin,
-      craft: 'craft' in product ? (product as { craft?: string | null }).craft ?? null : null,
-      warranty: 'warranty' in product ? (product as { warranty?: string | null }).warranty ?? null : null,
-      highlights: Array.isArray((product as { highlights?: string[] }).highlights)
-        ? (product as { highlights: string[] }).highlights
-        : [],
+      ...productDetailFields(product),
     }
     await prisma.product.upsert({
       where: { id: product.id },
@@ -105,6 +125,11 @@ async function main() {
       data: { isActive: false },
     })
   }
+
+  await prisma.category.updateMany({
+    where: { id: { notIn: categoryIds } },
+    data: { isActive: false },
+  })
 
   await prisma.category.deleteMany({
     where: {

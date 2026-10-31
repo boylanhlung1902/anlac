@@ -8,15 +8,22 @@ if (isLocal) {
   process.exit(0)
 }
 
-execSync('npx prisma db push --skip-generate', {
-  stdio: 'inherit',
-  env: process.env,
-})
+function run(command) {
+  console.log(`> ${command}`)
+  try {
+    execSync(command, {
+      stdio: 'inherit',
+      env: process.env,
+    })
+  } catch (error) {
+    const status = error && typeof error.status === 'number' ? error.status : 1
+    console.error(`Command failed (${status}): ${command}`)
+    process.exit(status || 1)
+  }
+}
 
-execSync('npx tsx prisma/restore-snapshot.ts', {
-  stdio: 'inherit',
-  env: process.env,
-})
+run('npx prisma db push --skip-generate')
+run('npx tsx prisma/restore-snapshot.ts')
 
 const adminUsername = (process.env.ADMIN_USERNAME || '').trim()
 const adminPassword = process.env.ADMIN_PASSWORD || ''
@@ -25,7 +32,4 @@ if (!adminUsername || !adminPassword) {
   process.exit(0)
 }
 
-execSync('npx tsx scripts/ensure-admin.ts', {
-  stdio: 'inherit',
-  env: process.env,
-})
+run('npx tsx scripts/ensure-admin.ts')
