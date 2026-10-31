@@ -12,7 +12,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
-SOURCE = os.environ.get("ANLAC_SOURCE", "/Users/trungminh/Downloads/AnhAnlac")
+SOURCE = os.environ.get("ANLAC_SOURCE", "/Users/tt/Documents/Toolvideo/AnhANLAC_watermark")
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 IMAGE_ROOT = os.path.join(ROOT, "public", "images", "anlac")
 CATALOG_PATH = os.path.join(ROOT, "data", "catalog.json")

@@ -1,137 +1,130 @@
 {
   "categories": [
     {
-      "name": "Tượng Phật Thích Ca",
-      "slug": "tuong-phat-thich-ca",
-      "image": "/images/anlac/tuong-phat-thich-ca/012.jpg",
-      "icon": "fa-place-of-worship",
-      "count": 34
+      "name": "Cuội vân mây",
+      "slug": "cuoi-van-may",
+      "image": "/images/anlac/cuoi-van-may/001.jpg",
+      "icon": "fa-cloud",
+      "count": 15
+    },
+    {
+      "name": "Phù điêu tranh đá",
+      "slug": "phu-dieu-tranh-da",
+      "image": "/images/anlac/phu-dieu-tranh-da/001.jpg",
+      "icon": "fa-border-all",
+      "count": 4
+    },
+    {
+      "name": "Quả cầu đá",
+      "slug": "qua-cau-da",
+      "image": "/images/anlac/qua-cau-da/001.jpg",
+      "icon": "fa-circle",
+      "count": 1
     },
     {
       "name": "Tượng chú tiểu",
       "slug": "tuong-chu-tieu",
-      "image": "/images/anlac/tuong-chu-tieu/028.jpg",
+      "image": "/images/anlac/tuong-chu-tieu/001.jpg",
       "icon": "fa-child",
-      "count": 59
+      "count": 79
     },
     {
-      "name": "Đèn đá",
-      "slug": "den-da",
-      "image": "/images/anlac/den-da/006.jpg",
-      "icon": "fa-lightbulb",
-      "count": 37
+      "name": "Tượng cổ điển châu Âu",
+      "slug": "tuong-co-dien-chau-au",
+      "image": "/images/anlac/tuong-co-dien-chau-au/001.jpg",
+      "icon": "fa-landmark",
+      "count": 6
+    },
+    {
+      "name": "Tượng hổ",
+      "slug": "tuong-ho",
+      "image": "/images/anlac/tuong-ho/001.jpg",
+      "icon": "fa-dragon",
+      "count": 4
+    },
+    {
+      "name": "Tượng kỳ lân",
+      "slug": "tuong-ky-lan",
+      "image": "/images/anlac/tuong-ky-lan/001.jpg",
+      "icon": "fa-shield-alt",
+      "count": 7
+    },
+    {
+      "name": "Tượng Phật Thích Ca",
+      "slug": "tuong-phat-thich-ca",
+      "image": "/images/anlac/tuong-phat-thich-ca/001.jpg",
+      "icon": "fa-place-of-worship",
+      "count": 33
+    },
+    {
+      "name": "Tượng Quan Âm",
+      "slug": "tuong-quan-am",
+      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "icon": "fa-praying-hands",
+      "count": 1
+    },
+    {
+      "name": "Tượng thiên thần",
+      "slug": "tuong-thien-than",
+      "image": "/images/anlac/tuong-thien-than/001.jpg",
+      "icon": "fa-feather-alt",
+      "count": 8
+    },
+    {
+      "name": "Tượng trẻ em",
+      "slug": "tuong-tre-em",
+      "image": "/images/anlac/tuong-tre-em/001.jpg",
+      "icon": "fa-child",
+      "count": 3
+    },
+    {
+      "name": "Tổng hợp xưởng",
+      "slug": "tong-hop-xuong",
+      "image": "/images/anlac/tong-hop-xuong/001.jpg",
+      "icon": "fa-images",
+      "count": 1
+    },
+    {
+      "name": "Điêu khắc chân dung",
+      "slug": "dieu-khac-chan-dung",
+      "image": "/images/anlac/dieu-khac-chan-dung/001.jpg",
+      "icon": "fa-user",
+      "count": 8
     },
     {
       "name": "Đài phun nước",
       "slug": "dai-phun-nuoc",
       "image": "/images/anlac/dai-phun-nuoc/001.jpg",
       "icon": "fa-water",
-      "count": 30
+      "count": 21
     },
     {
-      "name": "Tượng Di Lặc",
-      "slug": "tuong-di-lac",
-      "image": "/images/anlac/tuong-di-lac/004.jpg",
-      "icon": "fa-smile",
-      "count": 23
+      "name": "Đá cổ thạch",
+      "slug": "da-co-thach",
+      "image": "/images/anlac/da-co-thach/001.jpg",
+      "icon": "fa-gem",
+      "count": 9
     },
     {
-      "name": "Tượng Kỳ Lân",
-      "slug": "tuong-ky-lan",
-      "image": "/images/anlac/tuong-ky-lan/001.jpg",
-      "icon": "fa-shield-alt",
-      "count": 15
+      "name": "Đá vân thạch cổ",
+      "slug": "da-van-thach-co",
+      "image": "/images/anlac/da-van-thach-co/001.jpg",
+      "icon": "fa-mountain",
+      "count": 14
     },
     {
-      "name": "Điêu khắc chân dung",
-      "slug": "dieu-khac-chan-dung",
-      "image": "/images/anlac/dieu-khac-chan-dung/006.jpg",
-      "icon": "fa-user",
-      "count": 8
+      "name": "Đá vân thạch trắng",
+      "slug": "da-van-thach-trang",
+      "image": "/images/anlac/da-van-thach-trang/001.jpg",
+      "icon": "fa-layer-group",
+      "count": 28
     },
     {
-      "name": "Tượng cô gái",
-      "slug": "tuong-co-gai",
-      "image": "/images/anlac/tuong-co-gai/004.jpg",
-      "icon": "fa-female",
-      "count": 8
-    },
-    {
-      "name": "Tượng thiên thần",
-      "slug": "tuong-thien-than",
-      "image": "/images/anlac/tuong-thien-than/003.jpg",
-      "icon": "fa-feather-alt",
-      "count": 7
-    },
-    {
-      "name": "Ếch đá phong thuỷ",
-      "slug": "ech-da-phong-thuy",
-      "image": "/images/anlac/ech-da-phong-thuy/001.jpg",
-      "icon": "fa-frog",
-      "count": 6
-    },
-    {
-      "name": "Tượng Tỳ Hưu",
-      "slug": "tuong-ty-huu",
-      "image": "/images/anlac/tuong-ty-huu/001.jpg",
-      "icon": "fa-paw",
-      "count": 5
-    },
-    {
-      "name": "Phù điêu",
-      "slug": "phu-dieu",
-      "image": "/images/anlac/phu-dieu/001.jpg",
-      "icon": "fa-border-all",
-      "count": 3
-    },
-    {
-      "name": "Quả cầu đá",
-      "slug": "qua-cau-da",
-      "image": "/images/anlac/qua-cau-da/002.jpg",
-      "icon": "fa-circle",
-      "count": 2
-    },
-    {
-      "name": "Tượng Quan Âm",
-      "slug": "tuong-quan-am",
-      "image": "/images/anlac/tuong-quan-am/002.jpg",
-      "icon": "fa-praying-hands",
-      "count": 1
-    },
-    {
-      "name": "Tượng Thánh",
-      "slug": "tuong-thanh",
-      "image": "/images/anlac/tuong-thanh/001.jpg",
-      "icon": "fa-church",
-      "count": 1
-    },
-    {
-      "name": "Tượng rồng",
-      "slug": "tuong-rong",
-      "image": "/images/anlac/tuong-rong/001.jpg",
-      "icon": "fa-dragon",
-      "count": 1
-    },
-    {
-      "name": "Tượng cá",
-      "slug": "tuong-ca",
-      "image": "/images/anlac/tuong-ca/001.jpg",
-      "icon": "fa-fish",
-      "count": 1
-    },
-    {
-      "name": "Ảnh tổng hợp",
-      "slug": "anh-tong-hop",
-      "image": "/images/anlac/anh-tong-hop/002.jpg",
-      "icon": "fa-images",
-      "count": 2
-    },
-    {
-      "name": "Tượng Đá Nghệ Thuật",
-      "slug": "tuong-da-nghe-thuat",
-      "image": "/images/san-pham-my-nghe/tuong-da/anh1.webp",
-      "icon": "fa-place-of-worship",
-      "count": 6
+      "name": "Đèn đá",
+      "slug": "den-da",
+      "image": "/images/anlac/den-da/001.jpg",
+      "icon": "fa-lightbulb",
+      "count": 32
     },
     {
       "name": "Bàn Đá Trang Trí",
@@ -143,22 +136,8 @@
     {
       "name": "Bàn Ghế Đá",
       "slug": "ban-ghe-da",
-      "image": "/images/san-pham-my-nghe/ban-ghe-da/anh6.webp",
+      "image": "/images/san-pham-my-nghe/ban-ghe-da/anh1.webp",
       "icon": "fa-chair",
-      "count": 2
-    },
-    {
-      "name": "Đài Phun Nước",
-      "slug": "dai-phun-nuoc-truoc",
-      "image": "/images/san-pham-my-nghe/dai-phun-nuoc/anh1.webp",
-      "icon": "fa-water",
-      "count": 2
-    },
-    {
-      "name": "Bảng Hiệu Đá",
-      "slug": "bang-hieu-da",
-      "image": "/images/san-pham-my-nghe/bang-hieu-da/anh1.jpg",
-      "icon": "fa-sign",
       "count": 2
     },
     {
@@ -169,139 +148,48 @@
       "count": 2
     },
     {
-      "name": "Đèn Đá",
-      "slug": "den-da-truoc",
-      "image": "/images/san-pham-my-nghe/den-da/anh1.webp",
-      "icon": "fa-lightbulb",
-      "count": 2
-    },
-    {
       "name": "Lavabo Đá",
       "slug": "lavabo-da",
       "image": "/images/san-pham-my-nghe/lavabo-da/anh1.webp",
       "icon": "fa-sink",
       "count": 2
-    },
-    {
-      "name": "Tượng Đá",
-      "slug": "tuong-da",
-      "image": "/images/san-pham-my-nghe/tuong-da/anh1.webp",
-      "icon": "fa-user",
-      "count": 2
-    },
-    {
-      "name": "Thạch Mỹ Nghệ",
-      "slug": "thach-my-nghe",
-      "image": "/images/san-pham-my-nghe/thach-my-nghe/anh7.webp",
-      "icon": "fa-gem",
-      "count": 2
     }
   ],
   "featured": [
     {
-      "id": 131,
-      "name": "Đài phun nước 01",
+      "id": 117,
+      "name": "Tượng Phật Thích Ca",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/tuong-phat-thich-ca/001.jpg",
+      "description": "Tượng Phật Thích Ca chế tác từ đá tự nhiên, đường nét trang nghiêm, phù hợp không gian thờ."
+    },
+    {
+      "id": 21,
+      "name": "Tượng chú tiểu",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/tuong-chu-tieu/001.jpg",
+      "description": "Tượng chú tiểu đá với nhiều tư thế vui tươi, mang lại không khí an nhiên cho sân vườn."
+    },
+    {
+      "id": 243,
+      "name": "Đèn đá",
+      "price": "Liên hệ để báo giá",
+      "image": "/images/anlac/den-da/001.jpg",
+      "description": "Đèn đá sân vườn và không gian thờ, ánh sáng ấm kết hợp chất liệu đá tự nhiên."
+    },
+    {
+      "id": 171,
+      "name": "Đài phun nước",
       "price": "Liên hệ để báo giá",
       "image": "/images/anlac/dai-phun-nuoc/001.jpg",
-      "description": "Đài phun nước đá cho sân vườn. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
+      "description": "Đài phun nước đá cho sân vườn, resort và không gian ngoại thất cao cấp."
     },
     {
-      "id": 12,
-      "name": "Tượng Phật Thích Ca 12",
+      "id": 150,
+      "name": "Tượng Quan Âm",
       "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-phat-thich-ca/012.jpg",
-      "description": "Tượng Phật Thích Ca chế tác từ đá tự nhiên. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 233,
-      "name": "Phù điêu 01",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/phu-dieu/001.jpg",
-      "description": "Phù điêu đá trang trí. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 184,
-      "name": "Tượng Kỳ Lân 01",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-ky-lan/001.jpg",
-      "description": "Tượng kỳ lân đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 228,
-      "name": "Tượng Tỳ Hưu 01",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-ty-huu/001.jpg",
-      "description": "Tượng tỳ hưu đá phong thủy. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 222,
-      "name": "Ếch đá phong thuỷ 01",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/ech-da-phong-thuy/001.jpg",
-      "description": "Ếch đá phong thủy. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 99,
-      "name": "Đèn đá 06",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/den-da/006.jpg",
-      "description": "Đèn đá sân vườn và không gian thờ. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 164,
-      "name": "Tượng Di Lặc 04",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-di-lac/004.jpg",
-      "description": "Tượng Di Lặc đá phong thủy. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 217,
-      "name": "Tượng thiên thần 03",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-thien-than/003.jpg",
-      "description": "Tượng thiên thần đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 210,
-      "name": "Tượng cô gái 04",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-co-gai/004.jpg",
-      "description": "Tượng cô gái đá nghệ thuật. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 204,
-      "name": "Điêu khắc chân dung 06",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/dieu-khac-chan-dung/006.jpg",
-      "description": "Điêu khắc chân dung trên đá. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 253,
-      "name": "Bàn Ghế Đá Tự Nhiên",
-      "price": "12.500.000 VNĐ",
-      "image": "/images/san-pham-my-nghe/ban-ghe-da/anh6.webp",
-      "description": "Bàn ghế đá tự nhiên nguyên khối, đường nét thô mộc và bền vững cho sân vườn, biệt thự. Sản phẩm thuộc danh mục Bàn Ghế Đá của An Lạc Stone."
-    },
-    {
-      "id": 237,
-      "name": "Quả cầu đá 02",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/qua-cau-da/002.jpg",
-      "description": "Quả cầu đá phong thủy. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 62,
-      "name": "Tượng chú tiểu 28",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-chu-tieu/028.jpg",
-      "description": "Tượng chú tiểu đá, đường nét sinh động. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
-    },
-    {
-      "id": 20,
-      "name": "Tượng Phật Thích Ca 20",
-      "price": "Liên hệ để báo giá",
-      "image": "/images/anlac/tuong-phat-thich-ca/020.jpg",
-      "description": "Tượng Phật Thích Ca chế tác từ đá tự nhiên. Giá chưa niêm yết, vui lòng liên hệ để nhận báo giá."
+      "image": "/images/anlac/tuong-quan-am/001.jpg",
+      "description": "Tượng Quan Âm đá tự nhiên, dáng đứng thanh thoát, phù hợp không gian thờ và sân chùa."
     }
   ]
 }

@@ -63,6 +63,11 @@ async function main() {
       dimensions: product.dimensions,
       material: product.material,
       origin: product.origin,
+      craft: 'craft' in product ? (product as { craft?: string | null }).craft ?? null : null,
+      warranty: 'warranty' in product ? (product as { warranty?: string | null }).warranty ?? null : null,
+      highlights: Array.isArray((product as { highlights?: string[] }).highlights)
+        ? (product as { highlights: string[] }).highlights
+        : [],
     }
     await prisma.product.upsert({
       where: { id: product.id },
